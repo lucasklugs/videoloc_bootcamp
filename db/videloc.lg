@@ -1,0 +1,20 @@
+
+                Sat Jul 25 20:36:23 2026
+[2026/07/25@20:36:23.723-0300] P-26636      T-26200 I DBUTIL   : (451)   prostrct create session begin for Lucas on CON:. 
+[2026/07/25@20:36:23.724-0300] P-26636      T-26200 I DBUTIL   : (12862) Structure file C:\Users\Lucas\Projects\trabalho_final_progress\db\videloc.st used to create database with blocksize 4096. 
+[2026/07/25@20:36:23.725-0300] P-26636      T-26200 I DBUTIL   : (334)   prostrct create session end. 
+[2026/07/25@20:36:23.732-0300] P-26636      T-26200 I DBUTIL   : (451)   procopy session begin for Lucas on CON:. 
+[2026/07/25@20:36:23.747-0300] P-26636      T-26200 I DBUTIL   : (334)   procopy session end. 
+
+                Sat Jul 25 20:36:23 2026
+[2026/07/25@20:36:23.757-0300] P-26636      T-26200 I DBUTIL   : (451)   procopy get default SQL DBA session begin for Lucas on CON:. 
+[2026/07/25@20:36:23.757-0300] P-26636      T-26200 I DBUTIL   : (15321) Before Image Log Initialization at block 0  offset 0. 
+[2026/07/25@20:36:23.764-0300] P-26636      T-26200 I DBUTIL   : (14867) Procopy -newinstance Created a new database GUID. 
+[2026/07/25@20:36:23.766-0300] P-26636      T-26200 I DBUTIL   : (15109) At Database close the number of live transactions is 0. 
+[2026/07/25@20:36:23.766-0300] P-26636      T-26200 I DBUTIL   : (15743) Before Image Log Completion at Block 0 Offset 2662. 
+[2026/07/25@20:36:23.767-0300] P-26636      T-26200 I DBUTIL   : (334)   procopy get default SQL DBA session end. 
+
+                Sat Jul 25 20:36:27 2026
+[2026/07/25@20:36:27.516-0300] P-6988       T-26320 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/25@20:36:27.517-0300] P-6988       T-26320 I ABL      : (15321) Before Image Log Initialization at block 0  offset 2662. 
+[2026/07/25@20:36:27.527-0300] P-6988       T-26320 I ABL      : (7129)  Usr 0 set name to Lucas. 
