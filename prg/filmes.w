@@ -54,34 +54,33 @@ CREATE WIDGET-POOL.
 &Scoped-define FRAME-NAME DEFAULT-FRAME
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES Cidades
+&Scoped-define INTERNAL-TABLES Filmes
 
 /* Definitions for FRAME DEFAULT-FRAME                                  */
-&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.NomCidade 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.NomCidade 
-&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK
-&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK.
-&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
+&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Filmes.CodFilme ~
+Filmes.NomFilme Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Filmes.CodFilme ~
+Filmes.NomFilme Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
+&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Filmes
+&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Filmes
+&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Filmes SHARE-LOCK
+&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Filmes SHARE-LOCK.
+&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Filmes
+&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Filmes
 
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-FIELDS Clientes.CodCidade Cidades.NomCidade ~
-Clientes.Observacao 
-&Scoped-define ENABLED-TABLES Clientes Cidades
-&Scoped-define FIRST-ENABLED-TABLE Clientes
-&Scoped-define SECOND-ENABLED-TABLE Cidades
+&Scoped-Define ENABLED-FIELDS Filmes.CodFilme Filmes.NomFilme Filmes.Genero ~
+Filmes.ValFilme Filmes.Sinopse 
+&Scoped-define ENABLED-TABLES Filmes
+&Scoped-define FIRST-ENABLED-TABLE Filmes
 &Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
-bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done FILL-IN-7 ~
-FILL-IN-12 FILL-IN-14 
-&Scoped-Define DISPLAYED-FIELDS Clientes.CodCidade Cidades.NomCidade ~
-Clientes.Observacao 
-&Scoped-define DISPLAYED-TABLES Clientes Cidades
-&Scoped-define FIRST-DISPLAYED-TABLE Clientes
-&Scoped-define SECOND-DISPLAYED-TABLE Cidades
-&Scoped-Define DISPLAYED-OBJECTS FILL-IN-7 FILL-IN-12 FILL-IN-14 
+bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done 
+&Scoped-Define DISPLAYED-FIELDS Filmes.CodFilme Filmes.NomFilme ~
+Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
+&Scoped-define DISPLAYED-TABLES Filmes
+&Scoped-define FIRST-DISPLAYED-TABLE Filmes
+
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -152,21 +151,6 @@ DEFINE BUTTON bt-upd
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE VARIABLE FILL-IN-12 LIKE Clientes.NomCliente
-     VIEW-AS FILL-IN 
-     SIZE 32 BY 1
-     BGCOLOR 15  NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-14 LIKE Clientes.Endereco
-     VIEW-AS FILL-IN 
-     SIZE 52 BY 1
-     BGCOLOR 15  NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-7 LIKE Clientes.CodCliente
-     VIEW-AS FILL-IN 
-     SIZE 10.4 BY 1
-     BGCOLOR 15  NO-UNDO.
-
 DEFINE RECTANGLE RECT-5
      EDGE-PIXELS 2 GRAPHIC-EDGE    ROUNDED 
      SIZE 122 BY 2.38
@@ -180,7 +164,7 @@ DEFINE RECTANGLE RECT-6
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
 DEFINE QUERY DEFAULT-FRAME FOR 
-      Cidades SCROLLING.
+      Filmes SCROLLING.
 &ANALYZE-RESUME
 
 /* ************************  Frame Definitions  *********************** */
@@ -197,27 +181,25 @@ DEFINE FRAME DEFAULT-FRAME
      bt-cancel AT ROW 1.81 COL 71.8 WIDGET-ID 34
      bt-export AT ROW 1.81 COL 83.6 WIDGET-ID 36
      bt-done AT ROW 1.81 COL 111 WIDGET-ID 40
-     FILL-IN-7 AT ROW 6 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 58
-          BGCOLOR 15 
-     FILL-IN-12 AT ROW 7.19 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 68
-          BGCOLOR 15 
-     FILL-IN-14 AT ROW 8.38 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 72
-          BGCOLOR 15 
-     Clientes.CodCidade AT ROW 9.57 COL 17 COLON-ALIGNED WIDGET-ID 76
-          LABEL "Cidade"
+     Filmes.CodFilme AT ROW 6 COL 14 COLON-ALIGNED WIDGET-ID 82
           VIEW-AS FILL-IN 
-          SIZE 12 BY 1.19
+          SIZE 7 BY 1.19
           BGCOLOR 15 
-     Cidades.NomCidade AT ROW 9.57 COL 30 COLON-ALIGNED NO-LABEL WIDGET-ID 78
+     Filmes.NomFilme AT ROW 7.43 COL 14 COLON-ALIGNED WIDGET-ID 84
+          VIEW-AS FILL-IN 
+          SIZE 45 BY 1.19
+          BGCOLOR 15 
+     Filmes.Genero AT ROW 8.86 COL 14 COLON-ALIGNED WIDGET-ID 86
+          VIEW-AS FILL-IN 
+          SIZE 30 BY 1.19
+          BGCOLOR 15 
+     Filmes.ValFilme AT ROW 10.29 COL 14 COLON-ALIGNED WIDGET-ID 88
           VIEW-AS FILL-IN 
           SIZE 22 BY 1.19
           BGCOLOR 15 
-     Clientes.Observacao AT ROW 11 COL 16 COLON-ALIGNED WIDGET-ID 80
-          VIEW-AS FILL-IN 
-          SIZE 66 BY 1.19
+     Filmes.Sinopse AT ROW 11.71 COL 15 NO-LABEL WIDGET-ID 90
+          VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
+          SIZE 80 BY 3.33
           BGCOLOR 15 
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
      RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
@@ -273,16 +255,6 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
   VISIBLE,,RUN-PERSISTENT                                               */
 /* SETTINGS FOR FRAME DEFAULT-FRAME
    FRAME-NAME                                                           */
-/* SETTINGS FOR FILL-IN Clientes.CodCidade IN FRAME DEFAULT-FRAME
-   EXP-LABEL                                                            */
-/* SETTINGS FOR FILL-IN FILL-IN-12 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.NomCliente                                   */
-/* SETTINGS FOR FILL-IN FILL-IN-14 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.Endereco EXP-SIZE                            */
-/* SETTINGS FOR FILL-IN FILL-IN-7 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.CodCliente EXP-SIZE                          */
-/* SETTINGS FOR FILL-IN Cidades.NomCidade IN FRAME DEFAULT-FRAME
-   EXP-LABEL                                                            */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
@@ -294,7 +266,7 @@ THEN C-Win:HIDDEN = no.
 
 &ANALYZE-SUSPEND _QUERY-BLOCK FRAME DEFAULT-FRAME
 /* Query rebuild information for FRAME DEFAULT-FRAME
-     _TblList          = "videloc.Cidades"
+     _TblList          = "videloc.Filmes"
      _Query            is OPENED
 */  /* FRAME DEFAULT-FRAME */
 &ANALYZE-RESUME
@@ -399,17 +371,13 @@ PROCEDURE enable_UI :
 
   {&OPEN-QUERY-DEFAULT-FRAME}
   GET FIRST DEFAULT-FRAME.
-  DISPLAY FILL-IN-7 FILL-IN-12 FILL-IN-14 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
-  IF AVAILABLE Cidades THEN 
-    DISPLAY Cidades.NomCidade 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
-  IF AVAILABLE Clientes THEN 
-    DISPLAY Clientes.CodCidade Clientes.Observacao 
+  IF AVAILABLE Filmes THEN 
+    DISPLAY Filmes.CodFilme Filmes.NomFilme Filmes.Genero Filmes.ValFilme 
+          Filmes.Sinopse 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
-         bt-save bt-cancel bt-export bt-done FILL-IN-7 FILL-IN-12 FILL-IN-14 
-         Clientes.CodCidade Cidades.NomCidade Clientes.Observacao 
+         bt-save bt-cancel bt-export bt-done Filmes.CodFilme Filmes.NomFilme 
+         Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.
