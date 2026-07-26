@@ -50,10 +50,6 @@ CREATE WIDGET-POOL.
 /* Name of designated FRAME-NAME and/or first browse and/or first query */
 &Scoped-define FRAME-NAME DEFAULT-FRAME
 
-/* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS rect-menu RECT-2 RECT-3 RECT-4 bt-cidades ~
-bt-clientes bt-filmes bt-alugueis bt-relatclientes bt-relat bt-sair 
-
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
 
@@ -67,97 +63,13 @@ bt-clientes bt-filmes bt-alugueis bt-relatclientes bt-relat bt-sair
 /* Define the widget handle for the window                              */
 DEFINE VARIABLE C-Win AS WIDGET-HANDLE NO-UNDO.
 
-/* Definitions of the field level widgets                               */
-DEFINE BUTTON bt-alugueis 
-     LABEL "Alugueis" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-cidades 
-     LABEL "Cidades" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-clientes 
-     LABEL "Clientes" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-filmes 
-     LABEL "Filmes" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-relat 
-     LABEL "Alugueis" 
-     SIZE 23 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-relatclientes 
-     LABEL "Clientes" 
-     SIZE 27 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-sair 
-     LABEL "Sair" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE IMAGE IMAGE-4
-     FILENAME "images\logo-menu.bmp":U CONVERT-3D-COLORS
-     STRETCH-TO-FIT
-     SIZE 51 BY 5.24.
-
-DEFINE RECTANGLE RECT-2
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 63 BY 5.71
-     BGCOLOR 15 FGCOLOR 15 .
-
-DEFINE RECTANGLE RECT-3
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 63 BY 4.52
-     BGCOLOR 15 FGCOLOR 15 .
-
-DEFINE RECTANGLE RECT-4
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 24 BY 1.67
-     BGCOLOR 15 FGCOLOR 15 .
-
-DEFINE RECTANGLE rect-menu
-     EDGE-PIXELS 10    
-     SIZE 87 BY 21.67
-     BGCOLOR 15 FGCOLOR 15 .
-
-
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME DEFAULT-FRAME
-     bt-cidades AT ROW 9.33 COL 20 WIDGET-ID 6
-     bt-clientes AT ROW 9.33 COL 51 WIDGET-ID 14
-     bt-filmes AT ROW 11 COL 20 WIDGET-ID 8
-     bt-alugueis AT ROW 11 COL 51 WIDGET-ID 16
-     bt-relatclientes AT ROW 16.71 COL 18 WIDGET-ID 10
-     bt-relat AT ROW 16.71 COL 49 WIDGET-ID 18
-     bt-sair AT ROW 20.52 COL 63 WIDGET-ID 12
-     "Exportar Relatórios para JSON" VIEW-AS TEXT
-          SIZE 36 BY 1.19 AT ROW 15.29 COL 28.4 WIDGET-ID 36
-          BGCOLOR 15 FONT 6
-     "Olá bem vindo a video locadora!" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 6.48 COL 27 WIDGET-ID 32
-          BGCOLOR 15 FONT 6
-     "Menu" VIEW-AS TEXT
-          SIZE 8 BY 1.19 AT ROW 7.91 COL 43 WIDGET-ID 34
-          BGCOLOR 15 FONT 6
-     rect-menu AT ROW 1.24 COL 2 WIDGET-ID 2
-     RECT-2 AT ROW 7.67 COL 14 WIDGET-ID 22
-     IMAGE-4 AT ROW 1.71 COL 21 WIDGET-ID 28
-     RECT-3 AT ROW 15.05 COL 14 WIDGET-ID 30
-     RECT-4 AT ROW 20.29 COL 61.4 WIDGET-ID 38
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
-         SIZE 89.2 BY 22.29
-         BGCOLOR 0  WIDGET-ID 100.
+         SIZE 118.4 BY 18.38 WIDGET-ID 100.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -177,12 +89,12 @@ IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
          TITLE              = "<insert window title>"
-         HEIGHT             = 22.29
-         WIDTH              = 89.2
-         MAX-HEIGHT         = 48.05
-         MAX-WIDTH          = 384
-         VIRTUAL-HEIGHT     = 48.05
-         VIRTUAL-WIDTH      = 384
+         HEIGHT             = 18.38
+         WIDTH              = 118.4
+         MAX-HEIGHT         = 18.38
+         MAX-WIDTH          = 118.4
+         VIRTUAL-HEIGHT     = 18.38
+         VIRTUAL-WIDTH      = 118.4
          RESIZE             = yes
          SCROLL-BARS        = no
          STATUS-AREA        = no
@@ -205,11 +117,6 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
   VISIBLE,,RUN-PERSISTENT                                               */
 /* SETTINGS FOR FRAME DEFAULT-FRAME
    FRAME-NAME                                                           */
-/* SETTINGS FOR IMAGE IMAGE-4 IN FRAME DEFAULT-FRAME
-   NO-ENABLE                                                            */
-ASSIGN 
-       IMAGE-4:RESIZABLE IN FRAME DEFAULT-FRAME        = TRUE.
-
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
@@ -243,15 +150,6 @@ DO:
   APPLY "CLOSE":U TO THIS-PROCEDURE.
   RETURN NO-APPLY.
 END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME bt-cidades
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cidades C-Win
-ON CHOOSE OF bt-cidades IN FRAME DEFAULT-FRAME /* Cidades */
-RUN telas/cidades.w PERSISTENT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -322,9 +220,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE rect-menu RECT-2 RECT-3 RECT-4 bt-cidades bt-clientes bt-filmes 
-         bt-alugueis bt-relatclientes bt-relat bt-sair 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  VIEW FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.
 END PROCEDURE.

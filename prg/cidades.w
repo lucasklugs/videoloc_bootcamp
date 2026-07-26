@@ -1,5 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER AB_v10r12 GUI
 &ANALYZE-RESUME
+/* Connected Databases 
+          videloc          PROGRESS
+*/
 &Scoped-define WINDOW-NAME C-Win
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS C-Win 
 /*------------------------------------------------------------------------
@@ -47,12 +50,34 @@ CREATE WIDGET-POOL.
 &Scoped-define PROCEDURE-TYPE Window
 &Scoped-define DB-AWARE no
 
-/* Name of designated FRAME-NAME and/or first browse and/or first query */
+/* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME DEFAULT-FRAME
 
+/* Internal Tables (found by Frame, Query & Browse Queries)             */
+&Scoped-define INTERNAL-TABLES Cidades
+
+/* Definitions for FRAME DEFAULT-FRAME                                  */
+&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.CodCidade 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.CodCidade 
+&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Cidades
+&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
+&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK
+&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK.
+&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Cidades
+&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
+
+
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS rect-menu RECT-2 RECT-3 RECT-4 bt-cidades ~
-bt-clientes bt-filmes bt-alugueis bt-relatclientes bt-relat bt-sair 
+&Scoped-Define ENABLED-FIELDS Cidades.CodCidade 
+&Scoped-define ENABLED-TABLES Cidades
+&Scoped-define FIRST-ENABLED-TABLE Cidades
+&Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
+bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done NomCidade ~
+FILL-IN-6 
+&Scoped-Define DISPLAYED-FIELDS Cidades.CodCidade 
+&Scoped-define DISPLAYED-TABLES Cidades
+&Scoped-define FIRST-DISPLAYED-TABLE Cidades
+&Scoped-Define DISPLAYED-OBJECTS NomCidade FILL-IN-6 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -68,96 +93,113 @@ bt-clientes bt-filmes bt-alugueis bt-relatclientes bt-relat bt-sair
 DEFINE VARIABLE C-Win AS WIDGET-HANDLE NO-UNDO.
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON bt-alugueis 
-     LABEL "Alugueis" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
+DEFINE BUTTON bt-add 
+     LABEL "Adicionar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-cidades 
-     LABEL "Cidades" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
+DEFINE BUTTON bt-cancel 
+     LABEL "Cancelar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-clientes 
-     LABEL "Clientes" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
+DEFINE BUTTON bt-del 
+     LABEL "Eliminar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-filmes 
-     LABEL "Filmes" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-relat 
-     LABEL "Alugueis" 
-     SIZE 23 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-relatclientes 
-     LABEL "Clientes" 
-     SIZE 27 BY 1.19
-     BGCOLOR 15 FONT 3.
-
-DEFINE BUTTON bt-sair 
+DEFINE BUTTON bt-done 
      LABEL "Sair" 
-     SIZE 21 BY 1.19
-     BGCOLOR 15 FONT 3.
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE IMAGE IMAGE-4
-     FILENAME "images\logo-menu.bmp":U CONVERT-3D-COLORS
-     STRETCH-TO-FIT
-     SIZE 51 BY 5.24.
+DEFINE BUTTON bt-export 
+     LABEL "Exportar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE RECTANGLE RECT-2
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 63 BY 5.71
+DEFINE BUTTON bt-first 
+     LABEL "<" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE BUTTON bt-last 
+     LABEL ">" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE BUTTON bt-next 
+     LABEL ">>" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE BUTTON bt-prev 
+     LABEL "<<" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE BUTTON bt-save 
+     LABEL "Salvar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE BUTTON bt-upd 
+     LABEL "Modificar" 
+     SIZE 10.4 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
+DEFINE VARIABLE FILL-IN-6 LIKE Cidades.CodUF
+     VIEW-AS FILL-IN 
+     SIZE 6.4 BY 1 NO-UNDO.
+
+DEFINE VARIABLE NomCidade LIKE Cidades.NomCidade
+     VIEW-AS FILL-IN 
+     SIZE 26 BY 1.43 NO-UNDO.
+
+DEFINE RECTANGLE RECT-5
+     EDGE-PIXELS 2 GRAPHIC-EDGE    ROUNDED 
+     SIZE 122 BY 2.38
      BGCOLOR 15 FGCOLOR 15 .
 
-DEFINE RECTANGLE RECT-3
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 63 BY 4.52
+DEFINE RECTANGLE RECT-6
+     EDGE-PIXELS 2 GRAPHIC-EDGE    ROUNDED 
+     SIZE 122 BY 14.29
      BGCOLOR 15 FGCOLOR 15 .
 
-DEFINE RECTANGLE RECT-4
-     EDGE-PIXELS 2 GRAPHIC-EDGE    
-     SIZE 24 BY 1.67
-     BGCOLOR 15 FGCOLOR 15 .
-
-DEFINE RECTANGLE rect-menu
-     EDGE-PIXELS 10    
-     SIZE 87 BY 21.67
-     BGCOLOR 15 FGCOLOR 15 .
-
+/* Query definitions                                                    */
+&ANALYZE-SUSPEND
+DEFINE QUERY DEFAULT-FRAME FOR 
+      Cidades SCROLLING.
+&ANALYZE-RESUME
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME DEFAULT-FRAME
-     bt-cidades AT ROW 9.33 COL 20 WIDGET-ID 6
-     bt-clientes AT ROW 9.33 COL 51 WIDGET-ID 14
-     bt-filmes AT ROW 11 COL 20 WIDGET-ID 8
-     bt-alugueis AT ROW 11 COL 51 WIDGET-ID 16
-     bt-relatclientes AT ROW 16.71 COL 18 WIDGET-ID 10
-     bt-relat AT ROW 16.71 COL 49 WIDGET-ID 18
-     bt-sair AT ROW 20.52 COL 63 WIDGET-ID 12
-     "Exportar Relatórios para JSON" VIEW-AS TEXT
-          SIZE 36 BY 1.19 AT ROW 15.29 COL 28.4 WIDGET-ID 36
-          BGCOLOR 15 FONT 6
-     "Olá bem vindo a video locadora!" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 6.48 COL 27 WIDGET-ID 32
-          BGCOLOR 15 FONT 6
-     "Menu" VIEW-AS TEXT
-          SIZE 8 BY 1.19 AT ROW 7.91 COL 43 WIDGET-ID 34
-          BGCOLOR 15 FONT 6
-     rect-menu AT ROW 1.24 COL 2 WIDGET-ID 2
-     RECT-2 AT ROW 7.67 COL 14 WIDGET-ID 22
-     IMAGE-4 AT ROW 1.71 COL 21 WIDGET-ID 28
-     RECT-3 AT ROW 15.05 COL 14 WIDGET-ID 30
-     RECT-4 AT ROW 20.29 COL 61.4 WIDGET-ID 38
+     bt-first AT ROW 1.81 COL 3.4 WIDGET-ID 6
+     bt-prev AT ROW 1.81 COL 9 WIDGET-ID 20
+     bt-next AT ROW 1.81 COL 14.4 WIDGET-ID 22
+     bt-last AT ROW 1.81 COL 20 WIDGET-ID 24
+     bt-add AT ROW 1.81 COL 26.6 WIDGET-ID 26
+     bt-upd AT ROW 1.81 COL 37 WIDGET-ID 28
+     bt-del AT ROW 1.81 COL 47.4 WIDGET-ID 30
+     bt-save AT ROW 1.81 COL 61 WIDGET-ID 32
+     bt-cancel AT ROW 1.81 COL 71.8 WIDGET-ID 34
+     bt-export AT ROW 1.81 COL 83.6 WIDGET-ID 36
+     bt-done AT ROW 1.81 COL 111 WIDGET-ID 40
+     Cidades.CodCidade AT ROW 5.76 COL 12 COLON-ALIGNED WIDGET-ID 56
+          VIEW-AS FILL-IN 
+          SIZE 6 BY 1.43
+     NomCidade AT ROW 7.43 COL 12 COLON-ALIGNED HELP
+          "" WIDGET-ID 46
+     FILL-IN-6 AT ROW 9.1 COL 12 COLON-ALIGNED HELP
+          "" WIDGET-ID 54
+     RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
+     RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
-         SIZE 89.2 BY 22.29
-         BGCOLOR 0  WIDGET-ID 100.
+         SIZE 124.4 BY 18.91
+         BGCOLOR 7  WIDGET-ID 100.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -177,12 +219,12 @@ IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
          TITLE              = "<insert window title>"
-         HEIGHT             = 22.29
-         WIDTH              = 89.2
-         MAX-HEIGHT         = 48.05
-         MAX-WIDTH          = 384
-         VIRTUAL-HEIGHT     = 48.05
-         VIRTUAL-WIDTH      = 384
+         HEIGHT             = 18.91
+         WIDTH              = 124.4
+         MAX-HEIGHT         = 25.67
+         MAX-WIDTH          = 161
+         VIRTUAL-HEIGHT     = 25.67
+         VIRTUAL-WIDTH      = 161
          RESIZE             = yes
          SCROLL-BARS        = no
          STATUS-AREA        = no
@@ -204,16 +246,25 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
 /* SETTINGS FOR WINDOW C-Win
   VISIBLE,,RUN-PERSISTENT                                               */
 /* SETTINGS FOR FRAME DEFAULT-FRAME
-   FRAME-NAME                                                           */
-/* SETTINGS FOR IMAGE IMAGE-4 IN FRAME DEFAULT-FRAME
-   NO-ENABLE                                                            */
-ASSIGN 
-       IMAGE-4:RESIZABLE IN FRAME DEFAULT-FRAME        = TRUE.
-
+                                                                        */
+/* SETTINGS FOR FILL-IN FILL-IN-6 IN FRAME DEFAULT-FRAME
+   LIKE = videloc.Cidades.CodUF EXP-SIZE                                */
+/* SETTINGS FOR FILL-IN NomCidade IN FRAME DEFAULT-FRAME
+   LIKE = videloc.Cidades.                                              */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
 /* _RUN-TIME-ATTRIBUTES-END */
+&ANALYZE-RESUME
+
+
+/* Setting information for Queries and Browse Widgets fields            */
+
+&ANALYZE-SUSPEND _QUERY-BLOCK FRAME DEFAULT-FRAME
+/* Query rebuild information for FRAME DEFAULT-FRAME
+     _TblList          = "videloc.Cidades"
+     _Query            is OPENED
+*/  /* FRAME DEFAULT-FRAME */
 &ANALYZE-RESUME
 
  
@@ -243,15 +294,6 @@ DO:
   APPLY "CLOSE":U TO THIS-PROCEDURE.
   RETURN NO-APPLY.
 END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME bt-cidades
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cidades C-Win
-ON CHOOSE OF bt-cidades IN FRAME DEFAULT-FRAME /* Cidades */
-RUN telas/cidades.w PERSISTENT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -322,8 +364,17 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE rect-menu RECT-2 RECT-3 RECT-4 bt-cidades bt-clientes bt-filmes 
-         bt-alugueis bt-relatclientes bt-relat bt-sair 
+
+  {&OPEN-QUERY-DEFAULT-FRAME}
+  GET FIRST DEFAULT-FRAME.
+  DISPLAY NomCidade FILL-IN-6 
+      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  IF AVAILABLE Cidades THEN 
+    DISPLAY Cidades.CodCidade 
+      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
+         bt-save bt-cancel bt-export bt-done Cidades.CodCidade NomCidade 
+         FILL-IN-6 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.

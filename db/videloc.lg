@@ -202,3 +202,14 @@
 [2026/07/25@23:33:36.311-0300] P-12964      T-27912 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
 [2026/07/25@23:33:36.311-0300] P-12964      T-27912 I ABL      : (15321) Before Image Log Initialization at block 19  offset 4840. 
 [2026/07/25@23:33:36.317-0300] P-12964      T-27912 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/25@23:39:10.778-0300] P-12964      T-27912 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/25@23:39:10.778-0300] P-12964      T-27912 I ABL      : (15743) Before Image Log Completion at Block 19 Offset 4892. 
+[2026/07/25@23:39:10.779-0300] P-12964      T-27912 I ABL      : (334)   Single-user session end. 
+
+                Sun Jul 26 00:12:50 2026
+[2026/07/26@00:12:50.602-0300] P-30256      T-22240 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/26@00:12:50.603-0300] P-30256      T-22240 I ABL      : (15321) Before Image Log Initialization at block 19  offset 4892. 
+[2026/07/26@00:12:50.604-0300] P-30256      T-22240 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/26@00:17:30.517-0300] P-30256      T-22240 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/26@00:17:30.517-0300] P-30256      T-22240 I ABL      : (15743) Before Image Log Completion at Block 19 Offset 4944. 
+[2026/07/26@00:17:30.518-0300] P-30256      T-22240 I ABL      : (334)   Single-user session end. 
