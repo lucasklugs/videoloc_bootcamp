@@ -1,0 +1,203 @@
+/* Data definitions dumped from db/videloc */
+/* Generated for the videolocadora project */
+
+
+ADD TABLE "Alugueis"
+  AREA "Schema Area"
+
+ADD FIELD "CodAluguel" OF "Alugueis" AS integer
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Codigo de Aluguel"
+  MANDATORY
+
+ADD FIELD "CodCliente" OF "Alugueis" AS integer
+  FORMAT " >>>>9"
+  INITIAL "0"
+  LABEL "Código"
+  MANDATORY
+
+ADD FIELD "DatAluguel" OF "Alugueis" AS date
+  FORMAT "99/99/9999"
+  INITIAL "Today"
+  LABEL "Data"
+  MANDATORY
+
+ADD FIELD "ValAluguel" OF "Alugueis" AS decimal
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Total"
+  MANDATORY
+
+ADD FIELD "Observacao" OF "Alugueis" AS character
+  FORMAT "x(60)"
+  LABEL "Observação"
+
+ADD INDEX "CE-Aluguel-Cliente" ON "Alugueis"
+  AREA "Schema Area"
+  INDEX-FIELD "CodCliente" ASCENDING
+
+ADD INDEX "PK-Aluguel" ON "Alugueis"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodAluguel" ASCENDING
+
+ADD TABLE "Aluguel_filmes"
+  AREA "Schema Area"
+
+ADD FIELD "CodAluguel" OF "Aluguel_filmes" AS integer
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Aluguel"
+  MANDATORY
+
+ADD FIELD "CodItem" OF "Aluguel_filmes" AS integer
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Item"
+  MANDATORY
+
+ADD FIELD "CodFilme" OF "Aluguel_filmes" AS integer
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Produto"
+  MANDATORY
+
+ADD FIELD "NumQuantidade" OF "Aluguel_filmes" AS integer
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Quantidade"
+  MANDATORY
+
+ADD FIELD "ValTotal" OF "Aluguel_filmes" AS integer
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Valor Total"
+  MANDATORY
+
+ADD INDEX "CE-AluguelFilme-Filme" ON "Aluguel_filmes"
+  AREA "Schema Area"
+  INDEX-FIELD "CodFilme" ASCENDING
+
+ADD INDEX "PK-Aluguel" ON "Aluguel_filmes"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodAluguel" ASCENDING
+
+ADD INDEX "PK-Item" ON "Aluguel_filmes"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodItem" ASCENDING
+
+ADD TABLE "Cidades"
+  AREA "Schema Area"
+
+ADD FIELD "CodCidade" OF "Cidades" AS int64
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Código"
+  MANDATORY
+
+ADD FIELD "NomCidade" OF "Cidades" AS character
+  FORMAT "x(30)"
+  LABEL "Cidade"
+  MANDATORY
+
+ADD FIELD "CodUF" OF "Cidades" AS character
+  FORMAT "x(2)"
+  LABEL "UF"
+
+ADD INDEX "PK-Cidade" ON "Cidades"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodCidade" ASCENDING
+
+ADD TABLE "Clientes"
+  AREA "Schema Area"
+
+ADD FIELD "CodCliente" OF "Clientes" AS integer
+  FORMAT " >>>>9"
+  INITIAL "0"
+  LABEL "Código"
+  MANDATORY
+
+ADD FIELD "NomCliente" OF "Clientes" AS character
+  FORMAT "x(30)"
+  LABEL "Nome"
+  MANDATORY
+
+ADD FIELD "CodEndereco" OF "Clientes" AS character
+  FORMAT "x(50)"
+
+ADD FIELD "CodCidade" OF "Clientes" AS int64
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Codigo de Cidade"
+  MANDATORY
+
+ADD FIELD "Observacao" OF "Clientes" AS character
+  FORMAT "x(60)"
+
+ADD INDEX "CE-Cliente-Cidade" ON "Clientes"
+  AREA "Schema Area"
+  INDEX-FIELD "CodCidade" ASCENDING
+
+ADD INDEX "PK-Cliente" ON "Clientes"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodCliente" ASCENDING
+
+ADD TABLE "Filmes"
+  AREA "Schema Area"
+
+ADD FIELD "CodFilme" OF "Filmes" AS integer
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Código"
+  MANDATORY
+
+ADD FIELD "NomFilme" OF "Filmes" AS character
+  FORMAT "x(60)"
+  LABEL "Filmes"
+  MANDATORY
+
+ADD FIELD "ValFilme" OF "Filmes" AS integer
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Valor"
+  MANDATORY
+
+ADD INDEX "PK-Fillme" ON "Filmes"
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CodFilme" ASCENDING
+
+ADD SEQUENCE "SeqAluguel"
+  INITIAL 1
+  INCREMENT 1
+  MIN-VAL 1
+  MAX-VAL 2147483647
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "SeqCidade"
+  INITIAL 1
+  INCREMENT 1
+  MIN-VAL 1
+  MAX-VAL 2147483647
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "SeqCliente"
+  INITIAL 1
+  INCREMENT 1
+  MIN-VAL 1
+  MAX-VAL 2147483647
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "SeqFilme"
+  INITIAL 1
+  INCREMENT 1
+  MIN-VAL 1
+  MAX-VAL 2147483647
+  CYCLE-ON-LIMIT no
+
+.
