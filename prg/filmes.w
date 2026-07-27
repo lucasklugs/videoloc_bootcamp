@@ -39,6 +39,11 @@ CREATE WIDGET-POOL.
 
 /* Local Variable Definitions ---                                       */
 
+DEFINE VARIABLE iCodFilme AS INTEGER NO-UNDO.
+DEFINE VARIABLE cOpcao AS CHARACTER NO-UNDO.
+
+DEFINE BUFFER bf-filmes FOR filmes.
+
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
@@ -75,7 +80,7 @@ Filmes.ValFilme Filmes.Sinopse
 &Scoped-define ENABLED-TABLES Filmes
 &Scoped-define FIRST-ENABLED-TABLE Filmes
 &Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
-bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done 
+bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-exit 
 &Scoped-Define DISPLAYED-FIELDS Filmes.CodFilme Filmes.NomFilme ~
 Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
 &Scoped-define DISPLAYED-TABLES Filmes
@@ -111,7 +116,7 @@ DEFINE BUTTON bt-del
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-done 
+DEFINE BUTTON bt-exit AUTO-END-KEY 
      LABEL "Sair" 
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
@@ -122,22 +127,22 @@ DEFINE BUTTON bt-export
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-first 
-     LABEL "<" 
+     LABEL "<<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-last 
-     LABEL ">" 
-     SIZE 5 BY 1.19
-     BGCOLOR 15 FGCOLOR 0 .
-
-DEFINE BUTTON bt-next 
      LABEL ">>" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
+DEFINE BUTTON bt-next 
+     LABEL ">" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
 DEFINE BUTTON bt-prev 
-     LABEL "<<" 
+     LABEL "<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
@@ -180,34 +185,36 @@ DEFINE FRAME DEFAULT-FRAME
      bt-save AT ROW 1.81 COL 61 WIDGET-ID 32
      bt-cancel AT ROW 1.81 COL 71.8 WIDGET-ID 34
      bt-export AT ROW 1.81 COL 83.6 WIDGET-ID 36
-     bt-done AT ROW 1.81 COL 111 WIDGET-ID 40
+     bt-exit AT ROW 1.81 COL 111 WIDGET-ID 40
      Filmes.CodFilme AT ROW 6 COL 14 COLON-ALIGNED WIDGET-ID 82
           VIEW-AS FILL-IN 
-          SIZE 7 BY 1.19
+          SIZE 7 BY 1
           BGCOLOR 15 
      Filmes.NomFilme AT ROW 7.43 COL 14 COLON-ALIGNED WIDGET-ID 84
           VIEW-AS FILL-IN 
-          SIZE 45 BY 1.19
+          SIZE 45 BY 1
           BGCOLOR 15 
      Filmes.Genero AT ROW 8.86 COL 14 COLON-ALIGNED WIDGET-ID 86
           VIEW-AS FILL-IN 
-          SIZE 30 BY 1.19
+          SIZE 30 BY 1
           BGCOLOR 15 
      Filmes.ValFilme AT ROW 10.29 COL 14 COLON-ALIGNED WIDGET-ID 88
           VIEW-AS FILL-IN 
-          SIZE 22 BY 1.19
+          SIZE 22 BY 1
           BGCOLOR 15 
-     Filmes.Sinopse AT ROW 11.71 COL 15 NO-LABEL WIDGET-ID 90
+     Filmes.Sinopse AT ROW 11.71 COL 16 NO-LABEL WIDGET-ID 96
           VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
-          SIZE 80 BY 3.33
+          SIZE 69 BY 4.52
           BGCOLOR 15 
+     "Sinopse:" VIEW-AS TEXT
+          SIZE 9 BY .95 AT ROW 11.81 COL 6.6 WIDGET-ID 100
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
      RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
          SIZE 124.4 BY 18.91
-         BGCOLOR 7  WIDGET-ID 100.
+         BGCOLOR 8  WIDGET-ID 100.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -303,6 +310,70 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-first
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-first C-Win
+ON CHOOSE OF bt-first IN FRAME DEFAULT-FRAME /* << */
+DO:
+      RUN pi-posiciona-registro (INPUT "first").
+    IF  AVAIL filmes THEN DO:
+        DISP filmes WITH FRAME f-cad.
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-last
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-last C-Win
+ON CHOOSE OF bt-last IN FRAME DEFAULT-FRAME /* >> */
+DO:
+    RUN pi-posiciona-registro (INPUT "last").
+    IF  AVAIL filmes THEN DO:
+        DISP filmes WITH FRAME f-cad.
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-next
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-next C-Win
+ON CHOOSE OF bt-next IN FRAME DEFAULT-FRAME /* > */
+DO:
+      RUN pi-posiciona-registro (INPUT "next").
+    IF  AVAIL filmes THEN DO:
+        DISP filmes WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-prev
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-prev C-Win
+ON CHOOSE OF bt-prev IN FRAME DEFAULT-FRAME /* < */
+DO:
+      RUN pi-posiciona-registro (INPUT "prev").
+    IF  AVAIL filmes THEN DO:
+        DISP filmes WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK C-Win 
@@ -328,6 +399,10 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+
+    RUN pi-habilita2 ("").
+    APPLY "choose" TO bt-first.
+  
   IF NOT THIS-PROCEDURE:PERSISTENT THEN
     WAIT-FOR CLOSE OF THIS-PROCEDURE.
 END.
@@ -376,11 +451,182 @@ PROCEDURE enable_UI :
           Filmes.Sinopse 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
-         bt-save bt-cancel bt-export bt-done Filmes.CodFilme Filmes.NomFilme 
+         bt-save bt-cancel bt-export bt-exit Filmes.CodFilme Filmes.NomFilme 
          Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita C-Win 
+PROCEDURE pi-habilita :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    ASSIGN cOpcao = pOpcao.
+    
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        DISABLE bt-first bt-prev bt-next bt-last
+                bt-add bt-upd bt-del bt-export bt-exit
+                WITH FRAME f-cad.
+        ENABLE bt-save bt-cancel WITH FRAME f-cad.
+        ENABLE filmes.CodFilme
+               filmes.nomfilme 
+               filmes.genero
+               filmes.valfilme
+               filmes.sinopse
+               WITH FRAME f-cad.
+        IF pOpcao = "upd" THEN
+            DISABLE filmes.CodFilme WITH FRAME f-cad.
+    END.
+    ELSE DO:
+        DISABLE ALL WITH FRAME f-cad.
+        ENABLE bt-first bt-prev bt-next bt-last
+               bt-add bt-upd bt-del bt-export bt-exit 
+               WITH FRAME f-cad.
+    END.
+
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita2 C-Win 
+PROCEDURE pi-habilita2 :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    DEF VAR lHabilita AS LOGICAL NO-UNDO INITIAL FALSE.
+
+    ASSIGN cOpcao = pOpcao.
+
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        ASSIGN lHabilita = TRUE.
+    END.
+    
+    ASSIGN bt-first:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-prev:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-next:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-last:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-add:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-upd:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-del:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-export:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-exit:SENSITIVE IN FRAME f-cad = NOT lHabilita.
+           
+    ASSIGN bt-save:SENSITIVE IN FRAME f-cad = lHabilita
+           bt-cancel:SENSITIVE IN FRAME f-cad = lHabilita.
+
+    ASSIGN filmes.NomCidade:SENSITIVE IN FRAME f-cad = lHabilita 
+           filmes.genero:SENSITIVE IN FRAME f-cad = lHabilita
+           filmes.NomCidade:SENSITIVE IN FRAME f-cad = lHabilita 
+           filmes.valfilme:SENSITIVE IN FRAME f-cad = lHabilita
+           filmes.sinopse:SENSITIVE IN FRAME f-cad = lHabilita.
+
+    IF  pOpcao = "add" THEN
+        ASSIGN filmes.CodFilme:SENSITIVE IN FRAME f-cad = TRUE.
+    ELSE
+        ASSIGN filmes.CodFilme:SENSITIVE IN FRAME f-cad = FALSE.
+
+    IF  cOpcao = "" THEN DO:
+        FIND CURRENT filmes NO-LOCK NO-ERROR.
+        IF AVAIL filmes THEN DO:
+            DISPLAY filmes WITH FRAME f-cad.          
+        END.
+        ELSE 
+            APPLY "choose" TO bt-prev.  
+    END.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-posiciona-registro C-Win 
+PROCEDURE pi-posiciona-registro :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pNavega AS CHAR NO-UNDO.
+    
+    CASE pNavega:
+        WHEN "first" THEN DO:
+            FIND FIRST filmes NO-LOCK NO-ERROR.
+        END.
+        WHEN "last" THEN DO:
+            FIND LAST filmes NO-LOCK NO-ERROR.
+        END.
+        WHEN "next" THEN DO:
+            FIND NEXT filmes NO-LOCK NO-ERROR.
+            IF  NOT AVAIL filmes THEN DO:
+                APPLY "choose" TO bt-first IN FRAME f-cad.
+            END.
+        END.
+        WHEN "prev" THEN DO:
+            FIND PREV filmes NO-LOCK NO-ERROR.
+            IF  NOT AVAIL filmes THEN DO:
+                RUN pi-posiciona-registro (INPUT "last").
+            END.
+        END.
+    END CASE
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-save C-Win 
+PROCEDURE pi-save :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    CASE pOpcao:
+        WHEN "add" THEN DO WITH FRAME f-cad:
+        
+            FIND FIRST bf-filmes NO-LOCK
+                WHERE bf-filmes.CodFilme = INPUT FRAME f-cad filmes.CodFilme NO-ERROR.
+            IF AVAIL bf-filmes THEN DO:
+                MESSAGE "Código de cidade já existente!"
+                        VIEW-AS ALERT-BOX.
+                APPLY "entry" TO filmes.CodFilme IN FRAME f-cad.
+                RETURN "NOK".
+            END.            
+        
+            CREATE filmes.
+            ASSIGN filmes.CodFilme = INPUT FRAME f-cad filmes.CodFilme.
+            ASSIGN filmes EXCEPT filmes.CodFilme.
+        END.
+        WHEN "upd" THEN DO WITH FRAME f-cad:
+            FIND CURRENT filmes EXCLUSIVE-LOCK NO-ERROR.
+            ASSIGN filmes EXCEPT filmes.CodFilme.
+        END.
+    END CASE.
+    
+    RETURN "OK".
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

@@ -39,6 +39,12 @@ CREATE WIDGET-POOL.
 
 /* Local Variable Definitions ---                                       */
 
+
+DEFINE VARIABLE iCodCidade AS INTEGER NO-UNDO.
+DEFINE VARIABLE cOpcao AS CHARACTER NO-UNDO.
+
+DEFINE BUFFER bf-cidades FOR cidades.
+
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
@@ -50,34 +56,37 @@ CREATE WIDGET-POOL.
 &Scoped-define PROCEDURE-TYPE Window
 &Scoped-define DB-AWARE no
 
-/* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME DEFAULT-FRAME
+/* Name of designated FRAME-NAME and/or first browse and/or first query */
+&Scoped-define FRAME-NAME f-cad
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
 &Scoped-define INTERNAL-TABLES Cidades
 
-/* Definitions for FRAME DEFAULT-FRAME                                  */
-&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.CodCidade 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.CodCidade 
-&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK
-&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK.
-&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
+/* Definitions for FRAME f-cad                                          */
+&Scoped-define FIELDS-IN-QUERY-f-cad Cidades.CodCidade Cidades.NomCidade ~
+Cidades.CodUF 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-f-cad Cidades.CodCidade ~
+Cidades.NomCidade Cidades.CodUF 
+&Scoped-define ENABLED-TABLES-IN-QUERY-f-cad Cidades
+&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-f-cad Cidades
+&Scoped-define QUERY-STRING-f-cad FOR EACH Cidades SHARE-LOCK
+&Scoped-define OPEN-QUERY-f-cad OPEN QUERY f-cad FOR EACH Cidades SHARE-LOCK.
+&Scoped-define TABLES-IN-QUERY-f-cad Cidades
+&Scoped-define FIRST-TABLE-IN-QUERY-f-cad Cidades
 
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-FIELDS Cidades.CodCidade 
+&Scoped-Define ENABLED-FIELDS Cidades.CodCidade Cidades.NomCidade ~
+Cidades.CodUF 
 &Scoped-define ENABLED-TABLES Cidades
 &Scoped-define FIRST-ENABLED-TABLE Cidades
 &Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
-bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done NomCidade ~
-FILL-IN-6 
-&Scoped-Define DISPLAYED-FIELDS Cidades.CodCidade 
+bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-exit 
+&Scoped-Define DISPLAYED-FIELDS Cidades.CodCidade Cidades.NomCidade ~
+Cidades.CodUF 
 &Scoped-define DISPLAYED-TABLES Cidades
 &Scoped-define FIRST-DISPLAYED-TABLE Cidades
-&Scoped-Define DISPLAYED-OBJECTS NomCidade FILL-IN-6 
+
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -108,7 +117,7 @@ DEFINE BUTTON bt-del
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-done 
+DEFINE BUTTON bt-exit AUTO-END-KEY 
      LABEL "Sair" 
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
@@ -119,22 +128,22 @@ DEFINE BUTTON bt-export
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-first 
-     LABEL "<" 
+     LABEL "<<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-last 
-     LABEL ">" 
-     SIZE 5 BY 1.19
-     BGCOLOR 15 FGCOLOR 0 .
-
-DEFINE BUTTON bt-next 
      LABEL ">>" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
+DEFINE BUTTON bt-next 
+     LABEL ">" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
 DEFINE BUTTON bt-prev 
-     LABEL "<<" 
+     LABEL "<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
@@ -148,14 +157,6 @@ DEFINE BUTTON bt-upd
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE VARIABLE FILL-IN-6 LIKE Cidades.CodUF
-     VIEW-AS FILL-IN 
-     SIZE 6.4 BY 1 NO-UNDO.
-
-DEFINE VARIABLE NomCidade LIKE Cidades.NomCidade
-     VIEW-AS FILL-IN 
-     SIZE 26 BY 1.43 NO-UNDO.
-
 DEFINE RECTANGLE RECT-5
      EDGE-PIXELS 2 GRAPHIC-EDGE    ROUNDED 
      SIZE 122 BY 2.38
@@ -168,13 +169,13 @@ DEFINE RECTANGLE RECT-6
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
-DEFINE QUERY DEFAULT-FRAME FOR 
+DEFINE QUERY f-cad FOR 
       Cidades SCROLLING.
 &ANALYZE-RESUME
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME DEFAULT-FRAME
+DEFINE FRAME f-cad
      bt-first AT ROW 1.81 COL 3.4 WIDGET-ID 6
      bt-prev AT ROW 1.81 COL 9 WIDGET-ID 20
      bt-next AT ROW 1.81 COL 14.4 WIDGET-ID 22
@@ -185,21 +186,23 @@ DEFINE FRAME DEFAULT-FRAME
      bt-save AT ROW 1.81 COL 61 WIDGET-ID 32
      bt-cancel AT ROW 1.81 COL 71.8 WIDGET-ID 34
      bt-export AT ROW 1.81 COL 83.6 WIDGET-ID 36
-     bt-done AT ROW 1.81 COL 111 WIDGET-ID 40
+     bt-exit AT ROW 1.81 COL 111 WIDGET-ID 40
      Cidades.CodCidade AT ROW 5.76 COL 12 COLON-ALIGNED WIDGET-ID 56
           VIEW-AS FILL-IN 
-          SIZE 6 BY 1.43
-     NomCidade AT ROW 7.43 COL 12 COLON-ALIGNED HELP
-          "" WIDGET-ID 46
-     FILL-IN-6 AT ROW 9.1 COL 12 COLON-ALIGNED HELP
-          "" WIDGET-ID 54
+          SIZE 6 BY 1
+     Cidades.NomCidade AT ROW 7.43 COL 12 COLON-ALIGNED WIDGET-ID 46
+          VIEW-AS FILL-IN 
+          SIZE 26 BY 1
+     Cidades.CodUF AT ROW 9.1 COL 12 COLON-ALIGNED WIDGET-ID 54
+          VIEW-AS FILL-IN 
+          SIZE 6.4 BY 1
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
      RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
          SIZE 124.4 BY 18.91
-         BGCOLOR 7  WIDGET-ID 100.
+         BGCOLOR 8  WIDGET-ID 100.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -245,12 +248,8 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR WINDOW C-Win
   VISIBLE,,RUN-PERSISTENT                                               */
-/* SETTINGS FOR FRAME DEFAULT-FRAME
-                                                                        */
-/* SETTINGS FOR FILL-IN FILL-IN-6 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Cidades.CodUF EXP-SIZE                                */
-/* SETTINGS FOR FILL-IN NomCidade IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Cidades.                                              */
+/* SETTINGS FOR FRAME f-cad
+   FRAME-NAME                                                           */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
@@ -260,11 +259,11 @@ THEN C-Win:HIDDEN = no.
 
 /* Setting information for Queries and Browse Widgets fields            */
 
-&ANALYZE-SUSPEND _QUERY-BLOCK FRAME DEFAULT-FRAME
-/* Query rebuild information for FRAME DEFAULT-FRAME
+&ANALYZE-SUSPEND _QUERY-BLOCK FRAME f-cad
+/* Query rebuild information for FRAME f-cad
      _TblList          = "videloc.Cidades"
      _Query            is OPENED
-*/  /* FRAME DEFAULT-FRAME */
+*/  /* FRAME f-cad */
 &ANALYZE-RESUME
 
  
@@ -299,6 +298,173 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-add
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-add C-Win
+ON CHOOSE OF bt-add IN FRAME f-cad /* Adicionar */
+DO:
+   ASSIGN iCodCidade = NEXT-VALUE(SeqCidade).
+   CLEAR FRAME f-cad.
+   DISP iCodCidade @ cidades.CodCidade WITH FRAME f-cad.
+   RUN pi-habilita2 (INPUT "add").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-cancel
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cancel C-Win
+ON CHOOSE OF bt-cancel IN FRAME f-cad /* Cancelar */
+DO:
+  RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-del
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-del C-Win
+ON CHOOSE OF bt-del IN FRAME f-cad /* Eliminar */
+DO:
+   DEF VAR lResp AS LOGICAL NO-UNDO INITIAL NO.
+    MESSAGE "Deseja eliminar a cidade" cidades.NomCidade "?"
+            UPDATE lResp
+            VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO
+                TITLE "Eliminacao".
+    IF  lResp = YES THEN DO:
+        FIND FIRST clientes NO-LOCK 
+            WHERE clientes.CodCidade = cidades.CodCidade NO-ERROR.
+        IF AVAIL clientes THEN DO:
+            MESSAGE "Cidade em uso por cliente."
+                VIEW-AS ALERT-BOX INFORMATION BUTTONS OK.
+            RETURN NO-APPLY.           
+        END.
+        ELSE DO:
+            FIND CURRENT cidades EXCLUSIVE-LOCK NO-ERROR.
+            DELETE cidades.
+            APPLY "choose" TO bt-prev.            
+        END.
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-exit
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
+ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
+DO:
+    APPLY "close".
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-export
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
+ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
+DO:
+   RUN prg\cidade-json.p.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-first
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-first C-Win
+ON CHOOSE OF bt-first IN FRAME f-cad /* << */
+DO:                                             
+    RUN pi-posiciona-registro (INPUT "first").
+    IF  AVAIL cidades THEN DO:
+        DISP cidades WITH FRAME f-cad.
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-last
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-last C-Win
+ON CHOOSE OF bt-last IN FRAME f-cad /* >> */
+DO:
+    RUN pi-posiciona-registro (INPUT "last").
+    IF  AVAIL cidades THEN DO:
+        DISP cidades WITH FRAME f-cad.
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-next
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-next C-Win
+ON CHOOSE OF bt-next IN FRAME f-cad /* > */
+DO:
+    RUN pi-posiciona-registro (INPUT "next").
+    IF  AVAIL cidades THEN DO:
+        DISP cidades WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-prev
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-prev C-Win
+ON CHOOSE OF bt-prev IN FRAME f-cad /* < */
+DO:
+    RUN pi-posiciona-registro (INPUT "prev").
+    IF  AVAIL cidades THEN DO:
+        DISP cidades WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-save
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-save C-Win
+ON CHOOSE OF bt-save IN FRAME f-cad /* Salvar */
+DO:
+   RUN pi-save (cOpcao).
+   IF RETURN-VALUE = "NOK" THEN DO:
+       RETURN NO-APPLY.
+   END.
+   
+   RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-upd
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-upd C-Win
+ON CHOOSE OF bt-upd IN FRAME f-cad /* Modificar */
+DO:
+   RUN pi-habilita2 ("upd").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK C-Win 
@@ -323,9 +489,13 @@ PAUSE 0 BEFORE-HIDE.
 MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
-  RUN enable_UI.
-  IF NOT THIS-PROCEDURE:PERSISTENT THEN
-    WAIT-FOR CLOSE OF THIS-PROCEDURE.
+   RUN enable_UI.
+   
+   RUN pi-habilita2 ("").
+   APPLY "choose" TO bt-first.
+   
+   IF NOT THIS-PROCEDURE:PERSISTENT THEN
+      WAIT-FOR CLOSE OF THIS-PROCEDURE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -365,19 +535,179 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
 
-  {&OPEN-QUERY-DEFAULT-FRAME}
-  GET FIRST DEFAULT-FRAME.
-  DISPLAY NomCidade FILL-IN-6 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  {&OPEN-QUERY-f-cad}
+  GET FIRST f-cad.
   IF AVAILABLE Cidades THEN 
-    DISPLAY Cidades.CodCidade 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+    DISPLAY Cidades.CodCidade Cidades.NomCidade Cidades.CodUF 
+      WITH FRAME f-cad IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
-         bt-save bt-cancel bt-export bt-done Cidades.CodCidade NomCidade 
-         FILL-IN-6 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
-  {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
+         bt-save bt-cancel bt-export bt-exit Cidades.CodCidade 
+         Cidades.NomCidade Cidades.CodUF 
+      WITH FRAME f-cad IN WINDOW C-Win.
+  {&OPEN-BROWSERS-IN-QUERY-f-cad}
   VIEW C-Win.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita C-Win 
+PROCEDURE pi-habilita :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    ASSIGN cOpcao = pOpcao.
+    
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        DISABLE bt-first bt-prev bt-next bt-last
+                bt-add bt-upd bt-del bt-export bt-exit
+                WITH FRAME f-cad.
+        ENABLE bt-save bt-cancel WITH FRAME f-cad.
+        ENABLE Cidades.CodCidade
+               Cidades.NomCidade 
+               Cidades.CodUF                
+               WITH FRAME f-cad.
+        IF pOpcao = "upd" THEN
+            DISABLE Cidades.CodCidade WITH FRAME f-cad.
+    END.
+    ELSE DO:
+        DISABLE ALL WITH FRAME f-cad.
+        ENABLE bt-first bt-prev bt-next bt-last
+               bt-add bt-upd bt-del bt-export bt-exit 
+               WITH FRAME f-cad.
+    END.
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita2 C-Win 
+PROCEDURE pi-habilita2 :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    DEF VAR lHabilita AS LOGICAL NO-UNDO INITIAL FALSE.
+
+    ASSIGN cOpcao = pOpcao.
+
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        ASSIGN lHabilita = TRUE.
+    END.
+    
+    ASSIGN bt-first:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-prev:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-next:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-last:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-add:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-upd:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-del:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-export:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-exit:SENSITIVE IN FRAME f-cad = NOT lHabilita.
+           
+    ASSIGN bt-save:SENSITIVE IN FRAME f-cad = lHabilita
+           bt-cancel:SENSITIVE IN FRAME f-cad = lHabilita.
+
+    ASSIGN Cidades.NomCidade:SENSITIVE IN FRAME f-cad = lHabilita 
+           Cidades.CodUF:SENSITIVE IN FRAME f-cad = lHabilita.
+
+    IF  pOpcao = "add" THEN
+        ASSIGN Cidades.CodCidade:SENSITIVE IN FRAME f-cad = TRUE.
+    ELSE
+        ASSIGN Cidades.CodCidade:SENSITIVE IN FRAME f-cad = FALSE.
+
+    IF  cOpcao = "" THEN DO:
+        FIND CURRENT cidades NO-LOCK NO-ERROR.
+        IF AVAIL cidades THEN DO:
+            DISPLAY cidades WITH FRAME f-cad.          
+        END.
+        ELSE 
+            APPLY "choose" TO bt-prev.  
+    END.
+        
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-posiciona-registro C-Win 
+PROCEDURE pi-posiciona-registro :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+    DEF INPUT PARAM pNavega AS CHAR NO-UNDO.
+    
+    CASE pNavega:
+        WHEN "first" THEN DO:
+            FIND FIRST cidades NO-LOCK NO-ERROR.
+        END.
+        WHEN "last" THEN DO:
+            FIND LAST cidades NO-LOCK NO-ERROR.
+        END.
+        WHEN "next" THEN DO:
+            FIND NEXT cidades NO-LOCK NO-ERROR.
+            IF  NOT AVAIL cidades THEN DO:
+                APPLY "choose" TO bt-first IN FRAME f-cad.
+            END.
+        END.
+        WHEN "prev" THEN DO:
+            FIND PREV cidades NO-LOCK NO-ERROR.
+            IF  NOT AVAIL cidades THEN DO:
+                RUN pi-posiciona-registro (INPUT "last").
+            END.
+        END.
+    END CASE.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-save C-Win 
+PROCEDURE pi-save :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    CASE pOpcao:
+        WHEN "add" THEN DO WITH FRAME f-cad:
+        
+            FIND FIRST bf-cidades NO-LOCK
+                WHERE bf-cidades.CodCidade = INPUT FRAME f-cad cidades.CodCidade NO-ERROR.
+            IF AVAIL bf-cidades THEN DO:
+                MESSAGE "Código de cidade já existente!"
+                        VIEW-AS ALERT-BOX.
+                APPLY "entry" TO cidades.CodCidade IN FRAME f-cad.
+                RETURN "NOK".
+            END.            
+        
+            CREATE cidades.
+            ASSIGN cidades.CodCidade = INPUT FRAME f-cad cidades.CodCidade.
+            ASSIGN Cidades EXCEPT CodCidade.
+        END.
+        WHEN "upd" THEN DO WITH FRAME f-cad:
+            FIND CURRENT Cidades EXCLUSIVE-LOCK NO-ERROR.
+            ASSIGN Cidades EXCEPT CodCidade.
+        END.
+    END CASE.
+    
+    RETURN "OK".
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
