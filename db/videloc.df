@@ -14,7 +14,7 @@ ADD FIELD "CodAluguel" OF "Alugueis" AS integer
 ADD FIELD "CodCliente" OF "Alugueis" AS integer
   FORMAT " >>>>9"
   INITIAL "0"
-  LABEL "Código"
+  LABEL "Codigo"
   MANDATORY
 
 ADD FIELD "DatAluguel" OF "Alugueis" AS date
@@ -31,7 +31,7 @@ ADD FIELD "ValAluguel" OF "Alugueis" AS decimal
 
 ADD FIELD "Observacao" OF "Alugueis" AS character
   FORMAT "x(60)"
-  LABEL "Observação"
+  LABEL "Observacao"
 
 ADD INDEX "CE-Aluguel-Cliente" ON "Alugueis"
   AREA "Schema Area"
@@ -83,10 +83,6 @@ ADD INDEX "PK-Aluguel" ON "Aluguel_filmes"
   AREA "Schema Area"
   UNIQUE
   INDEX-FIELD "CodAluguel" ASCENDING
-
-ADD INDEX "PK-Item" ON "Aluguel_filmes"
-  AREA "Schema Area"
-  UNIQUE
   INDEX-FIELD "CodItem" ASCENDING
 
 ADD TABLE "Cidades"
@@ -95,7 +91,7 @@ ADD TABLE "Cidades"
 ADD FIELD "CodCidade" OF "Cidades" AS int64
   FORMAT ">>>>9"
   INITIAL "0"
-  LABEL "Código"
+  LABEL "Codigo"
   MANDATORY
 
 ADD FIELD "NomCidade" OF "Cidades" AS character
@@ -118,7 +114,7 @@ ADD TABLE "Clientes"
 ADD FIELD "CodCliente" OF "Clientes" AS integer
   FORMAT " >>>>9"
   INITIAL "0"
-  LABEL "Código"
+  LABEL "Codigo"
   MANDATORY
 
 ADD FIELD "NomCliente" OF "Clientes" AS character
@@ -126,13 +122,13 @@ ADD FIELD "NomCliente" OF "Clientes" AS character
   LABEL "Nome"
   MANDATORY
 
-ADD FIELD "CodEndereco" OF "Clientes" AS character
+ADD FIELD "Endereco" OF "Clientes" AS character
   FORMAT "x(50)"
 
 ADD FIELD "CodCidade" OF "Clientes" AS int64
   FORMAT ">>>>9"
   INITIAL "0"
-  LABEL "Codigo de Cidade"
+  LABEL "Codigo"
   MANDATORY
 
 ADD FIELD "Observacao" OF "Clientes" AS character
@@ -153,7 +149,7 @@ ADD TABLE "Filmes"
 ADD FIELD "CodFilme" OF "Filmes" AS integer
   FORMAT ">>>>9"
   INITIAL "0"
-  LABEL "Código"
+  LABEL "Codigo"
   MANDATORY
 
 ADD FIELD "NomFilme" OF "Filmes" AS character
@@ -166,6 +162,15 @@ ADD FIELD "ValFilme" OF "Filmes" AS integer
   INITIAL "0"
   LABEL "Valor"
   MANDATORY
+
+ADD FIELD "Genero" OF "Filmes" AS character
+  FORMAT "x(30)"
+  LABEL "Genero"
+  MANDATORY
+
+ADD FIELD "Sinopse" OF "Filmes" AS character
+  FORMAT "x(255)"
+  LABEL "Sinopse"
 
 ADD INDEX "PK-Fillme" ON "Filmes"
   AREA "Schema Area"
@@ -180,24 +185,26 @@ ADD SEQUENCE "SeqAluguel"
   CYCLE-ON-LIMIT no
 
 ADD SEQUENCE "SeqCidade"
-  INITIAL 1
+  INITIAL 0
   INCREMENT 1
-  MIN-VAL 1
   MAX-VAL 2147483647
   CYCLE-ON-LIMIT no
 
 ADD SEQUENCE "SeqCliente"
-  INITIAL 1
+  INITIAL 0
   INCREMENT 1
-  MIN-VAL 1
   MAX-VAL 2147483647
   CYCLE-ON-LIMIT no
 
 ADD SEQUENCE "SeqFilme"
-  INITIAL 1
+  INITIAL 0
   INCREMENT 1
-  MIN-VAL 1
   MAX-VAL 2147483647
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "SeqItem"
+  INITIAL 0
+  INCREMENT 1
   CYCLE-ON-LIMIT no
 
 .

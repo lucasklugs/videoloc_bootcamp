@@ -68,13 +68,16 @@ Para executar o projeto, é necessário ter o Progress OpenEdge instalado na má
 
 1. Abra o ambiente do Progress OpenEdge.
 2. Conecte o banco localizado em `db/videloc`.
-3. Execute o arquivo `main.p`.
+3. Configure o PROPATH apontando para a raiz do projeto.
+4. Execute o arquivo `main.p`.
 
 Também é possível abrir pelo AppBuilder carregando a tela principal:
 
 ```progress
 RUN prg/menu.w.
 ```
+
+É recomendado usar o PROPATH com a raiz do projeto para facilitar a execução das telas e procedures, evitando erros de caminho ao abrir telas pelo menu ou gerar exportações e relatórios.
 
 ## Observações
 
