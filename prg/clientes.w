@@ -342,16 +342,16 @@ END.
 ON CHOOSE OF bt-del IN FRAME f-cad /* Eliminar */
 DO:
     DEF VAR lResp AS LOGICAL NO-UNDO INITIAL NO.
-    MESSAGE "Deseja eliminar o filme" clientes.NomCliente "?"
+    MESSAGE "Deseja eliminar o cliente" clientes.NomCliente "?"
             UPDATE lResp
             VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO
                 TITLE "Eliminacao".
     IF  lResp = YES THEN DO:
         FIND FIRST alugueis NO-LOCK 
             WHERE alugueis.CodCliente = Clientes.CodCliente NO-ERROR.
-        IF AVAIL aluguel_filmes THEN DO:
-            MESSAGE "Há alugueis ativos com este filme."
-                VIEW-AS ALERT-BOX INFORMATION BUTTONS OK.
+        IF AVAIL alugueis THEN DO:
+            MESSAGE "Este cliente tem alugueis ativos!"
+                VIEW-AS ALERT-BOX ERROR BUTTONS OK.
             RETURN NO-APPLY.           
         END.
         ELSE DO:
@@ -370,7 +370,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
 ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
 DO:
-   APPLY "close".  
+   APPLY "CLOSE":U TO THIS-PROCEDURE.  
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -381,7 +381,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
 ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
 DO:
-    RUN prg\procedures\clientes-json.p.
+    RUN prg\procedures\clientes-json-csv.p.
 END.
 
 /* _UIB-CODE-BLOCK-END */

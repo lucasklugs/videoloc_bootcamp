@@ -8,6 +8,10 @@ DEF VAR cTmp  AS CHAR NO-UNDO.
 
 DEF BUFFER bfClientes FOR clientes.
 
+FUNCTION fn-csv RETURNS CHARACTER (INPUT pcValue AS CHARACTER):
+    RETURN '"' + REPLACE(pcValue, '"', '""') + '"'.
+END FUNCTION.
+
 aList = NEW JsonArray().
 FOR EACH bfClientes 
     FIELDS(CodCliente NomCliente Endereco CodCidade Observacao) NO-LOCK:
@@ -20,5 +24,28 @@ FOR EACH bfClientes
     aList:ADD(oObj).
 END.
 aList:WriteFile("c:\tmp\clientes.json", YES).
+
+OUTPUT TO "c:\tmp\clientes.csv".
+PUT UNFORMATTED
+    fn-csv("codigo") ";"
+    fn-csv("nome cliente") ";"
+    fn-csv("endereco") ";"
+    fn-csv("cidade") ";"
+    fn-csv("observacao")
+    SKIP.
+
+FOR EACH bfClientes
+    FIELDS(CodCliente NomCliente Endereco CodCidade Observacao) NO-LOCK:
+    PUT UNFORMATTED
+        bfClientes.CodCliente ";"
+        fn-csv(bfClientes.NomCliente) ";"
+        fn-csv(bfClientes.Endereco) ";"
+        bfClientes.CodCidade ";"
+        fn-csv(bfClientes.Observacao)
+        SKIP.
+END.
+OUTPUT CLOSE.
+
 OS-COMMAND NO-WAIT VALUE("notepad c:\tmp\clientes.json").
+OS-COMMAND NO-WAIT VALUE("notepad c:\tmp\clientes.csv").
 DELETE OBJECT aList.

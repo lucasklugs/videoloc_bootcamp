@@ -356,7 +356,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
 ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
 DO:
-    APPLY "close".
+    APPLY "CLOSE":U TO THIS-PROCEDURE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -367,7 +367,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
 ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
 DO:
-   RUN prg\procedures\cidade-json.p.
+   RUN prg\procedures\cidade-json-csv.p.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -712,4 +712,6 @@ END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
+
+
 

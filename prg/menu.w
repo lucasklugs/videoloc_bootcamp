@@ -139,7 +139,7 @@ DEFINE FRAME DEFAULT-FRAME
      bt-relatclientes AT ROW 16.71 COL 18 WIDGET-ID 10
      bt-relat AT ROW 16.71 COL 49 WIDGET-ID 18
      bt-sair AT ROW 20.52 COL 63 WIDGET-ID 12
-     "Exportar Relatórios para JSON" VIEW-AS TEXT
+     "Relatorios em arquivo TXT" VIEW-AS TEXT
           SIZE 36 BY 1.19 AT ROW 15.29 COL 28.4 WIDGET-ID 36
           BGCOLOR 15 FONT 6
      "Olá bem vindo a video locadora!" VIEW-AS TEXT
@@ -292,16 +292,36 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME bt-relatclientes
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-relatclientes C-Win
-ON CHOOSE OF bt-relatclientes IN FRAME DEFAULT-FRAME /* Clientes */
+&Scoped-define SELF-NAME bt-relat
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-relat C-Win
+ON CHOOSE OF bt-relat IN FRAME DEFAULT-FRAME /* Alugueis */
 DO:
-  RUN prg/cidades.w PERSISTENT.
+  RUN prg/procedures/relatorio-alugueis.p.
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&Scoped-define SELF-NAME bt-relatclientes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-relatclientes C-Win
+ON CHOOSE OF bt-relatclientes IN FRAME DEFAULT-FRAME /* Clientes */
+DO:
+  RUN prg/procedures/relatorio-clientes.p.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-sair
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-sair C-Win
+ON CHOOSE OF bt-sair IN FRAME DEFAULT-FRAME /* Sair */
+DO:
+  APPLY "CLOSE":U TO THIS-PROCEDURE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
 
 &UNDEFINE SELF-NAME
 
@@ -377,4 +397,8 @@ END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
+
+
+
+
 

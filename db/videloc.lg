@@ -335,3 +335,143 @@
 [2026/07/27@11:08:22.275-0300] P-22268      T-12260 I ABL      : (15109) At Database close the number of live transactions is 0. 
 [2026/07/27@11:08:22.275-0300] P-22268      T-12260 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
 [2026/07/27@11:08:22.275-0300] P-22268      T-12260 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:09:10 2026
+[2026/07/27@11:09:10.728-0300] P-11588      T-25848 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:09:10.728-0300] P-11588      T-25848 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:09:10.733-0300] P-11588      T-25848 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:12:26.993-0300] P-11588      T-25848 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:12:26.993-0300] P-11588      T-25848 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:12:26.994-0300] P-11588      T-25848 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:12:45 2026
+[2026/07/27@11:12:45.430-0300] P-3952       T-3872  I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:12:45.430-0300] P-3952       T-3872  I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:12:45.436-0300] P-3952       T-3872  I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:12:45.446-0300] P-3952       T-3872  I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:12:45.446-0300] P-3952       T-3872  I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:12:45.447-0300] P-3952       T-3872  I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:14:42 2026
+[2026/07/27@11:14:42.908-0300] P-28292      T-17428 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:14:42.909-0300] P-28292      T-17428 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:14:42.915-0300] P-28292      T-17428 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:14:42.948-0300] P-28292      T-17428 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:14:42.948-0300] P-28292      T-17428 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:14:42.949-0300] P-28292      T-17428 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:16:06 2026
+[2026/07/27@11:16:06.521-0300] P-6216       T-26200 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:16:06.522-0300] P-6216       T-26200 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:16:06.526-0300] P-6216       T-26200 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:16:26.263-0300] P-6216       T-26200 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:16:26.263-0300] P-6216       T-26200 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:16:26.264-0300] P-6216       T-26200 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:17:16 2026
+[2026/07/27@11:17:16.182-0300] P-8032       T-12900 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:17:16.182-0300] P-8032       T-12900 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:17:16.188-0300] P-8032       T-12900 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:17:16.197-0300] P-8032       T-12900 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:17:16.197-0300] P-8032       T-12900 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:17:16.198-0300] P-8032       T-12900 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:17:59 2026
+[2026/07/27@11:17:59.106-0300] P-1712       T-6212  I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:17:59.106-0300] P-1712       T-6212  I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:17:59.111-0300] P-1712       T-6212  I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:19:57.629-0300] P-1712       T-6212  I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:19:57.629-0300] P-1712       T-6212  I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:19:57.630-0300] P-1712       T-6212  I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:22:38 2026
+[2026/07/27@11:22:38.533-0300] P-16056      T-27088 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:22:38.533-0300] P-16056      T-27088 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:22:38.539-0300] P-16056      T-27088 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:22:38.547-0300] P-16056      T-27088 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:22:38.547-0300] P-16056      T-27088 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:22:38.547-0300] P-16056      T-27088 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:23:13 2026
+[2026/07/27@11:23:13.708-0300] P-22260      T-28000 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:23:13.709-0300] P-22260      T-28000 I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:23:13.715-0300] P-22260      T-28000 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:23:13.720-0300] P-22260      T-28000 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:23:13.720-0300] P-22260      T-28000 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 596. 
+[2026/07/27@11:23:13.721-0300] P-22260      T-28000 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:27:27 2026
+[2026/07/27@11:27:27.182-0300] P-13892      T-9652  I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:27:27.183-0300] P-13892      T-9652  I ABL      : (5194)  Event Logger error: Could not find 'PROMSGS.DLL'. 
+[2026/07/27@11:27:27.183-0300] P-13892      T-9652  I ABL      : (15321) Before Image Log Initialization at block 35  offset 596. 
+[2026/07/27@11:27:27.188-0300] P-13892      T-9652  I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:28:21.592-0300] P-13892      T-9652  I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:28:21.592-0300] P-13892      T-9652  I ABL      : (15743) Before Image Log Completion at Block 35 Offset 648. 
+[2026/07/27@11:28:21.593-0300] P-13892      T-9652  I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:29:34 2026
+[2026/07/27@11:29:34.836-0300] P-8800       T-32712 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:29:34.836-0300] P-8800       T-32712 I ABL      : (15321) Before Image Log Initialization at block 35  offset 648. 
+[2026/07/27@11:29:34.842-0300] P-8800       T-32712 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:29:34.858-0300] P-8800       T-32712 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:29:34.858-0300] P-8800       T-32712 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 648. 
+[2026/07/27@11:29:34.859-0300] P-8800       T-32712 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:30:17 2026
+[2026/07/27@11:30:17.091-0300] P-27904      T-18764 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:30:17.092-0300] P-27904      T-18764 I ABL      : (5194)  Event Logger error: Could not find 'PROMSGS.DLL'. 
+[2026/07/27@11:30:17.092-0300] P-27904      T-18764 I ABL      : (15321) Before Image Log Initialization at block 35  offset 648. 
+[2026/07/27@11:30:17.097-0300] P-27904      T-18764 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:30:50.298-0300] P-27904      T-18764 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:30:50.298-0300] P-27904      T-18764 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 700. 
+[2026/07/27@11:30:50.299-0300] P-27904      T-18764 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:31:47 2026
+[2026/07/27@11:31:47.023-0300] P-28636      T-24236 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:31:47.024-0300] P-28636      T-24236 I ABL      : (5194)  Event Logger error: Could not find 'PROMSGS.DLL'. 
+[2026/07/27@11:31:47.024-0300] P-28636      T-24236 I ABL      : (15321) Before Image Log Initialization at block 35  offset 700. 
+[2026/07/27@11:31:47.029-0300] P-28636      T-24236 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:31:59.973-0300] P-28636      T-24236 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:31:59.973-0300] P-28636      T-24236 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 752. 
+[2026/07/27@11:31:59.974-0300] P-28636      T-24236 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:32:22 2026
+[2026/07/27@11:32:22.679-0300] P-7400       T-30540 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:32:22.679-0300] P-7400       T-30540 I ABL      : (15321) Before Image Log Initialization at block 35  offset 752. 
+[2026/07/27@11:32:22.686-0300] P-7400       T-30540 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:32:41.974-0300] P-7400       T-30540 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:32:41.974-0300] P-7400       T-30540 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 752. 
+[2026/07/27@11:32:41.975-0300] P-7400       T-30540 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:33:53 2026
+[2026/07/27@11:33:53.356-0300] P-11456      T-29896 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:33:53.356-0300] P-11456      T-29896 I ABL      : (15321) Before Image Log Initialization at block 35  offset 752. 
+[2026/07/27@11:33:53.362-0300] P-11456      T-29896 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:33:53.366-0300] P-11456      T-29896 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:33:53.366-0300] P-11456      T-29896 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 752. 
+[2026/07/27@11:33:53.367-0300] P-11456      T-29896 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:34:01 2026
+[2026/07/27@11:34:01.046-0300] P-23712      T-27488 I ABL      : (451)   Single-user session begin for CodexSandboxOffline on batch. 
+[2026/07/27@11:34:01.046-0300] P-23712      T-27488 I ABL      : (15321) Before Image Log Initialization at block 35  offset 752. 
+[2026/07/27@11:34:01.052-0300] P-23712      T-27488 I ABL      : (7129)  Usr 0 set name to CodexSandboxOffline. 
+[2026/07/27@11:34:20.361-0300] P-23712      T-27488 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:34:20.361-0300] P-23712      T-27488 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 752. 
+[2026/07/27@11:34:20.362-0300] P-23712      T-27488 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:34:55 2026
+[2026/07/27@11:34:55.131-0300] P-21180      T-15948 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:34:55.132-0300] P-21180      T-15948 I ABL      : (15321) Before Image Log Initialization at block 35  offset 752. 
+[2026/07/27@11:34:55.138-0300] P-21180      T-15948 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:34:55.174-0300] P-21180      T-15948 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:34:55.174-0300] P-21180      T-15948 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 752. 
+[2026/07/27@11:34:55.175-0300] P-21180      T-15948 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:36:14 2026
+[2026/07/27@11:36:14.515-0300] P-9060       T-7036  I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:36:14.516-0300] P-9060       T-7036  I ABL      : (5194)  Event Logger error: Could not find 'PROMSGS.DLL'. 
+[2026/07/27@11:36:14.516-0300] P-9060       T-7036  I ABL      : (15321) Before Image Log Initialization at block 35  offset 752. 
+[2026/07/27@11:36:14.521-0300] P-9060       T-7036  I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (15743) Before Image Log Completion at Block 35 Offset 3362. 
+[2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (334)   Single-user session end. 
