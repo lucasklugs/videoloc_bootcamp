@@ -63,16 +63,15 @@ DEFINE BUFFER bf-alugueis FOR alugueis.
 &Scoped-define INTERNAL-TABLES Aluguel_filmes Clientes Filmes Alugueis
 
 /* Definitions for BROWSE br-filme                                      */
-&Scoped-define FIELDS-IN-QUERY-br-filme Aluguel_filmes.CodItem ~
-Aluguel_filmes.CodFilme Aluguel_filmes.NumQuantidade Filmes.ValFilme ~
-Aluguel_filmes.ValTotal 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-br-filme 
-&Scoped-define QUERY-STRING-br-filme FOR EACH Aluguel_filmes NO-LOCK, ~
-      EACH Clientes OF Alugueis NO-LOCK, ~
-      EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-br-filme OPEN QUERY br-filme FOR EACH Aluguel_filmes NO-LOCK, ~
-      EACH Clientes OF Alugueis NO-LOCK, ~
-      EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION.
+&Scoped-define FIELDS-IN-QUERY-br-filme Aluguel_filmes.CodItem Aluguel_filmes.CodFilme Aluguel_filmes.NumQuantidade Filmes.ValFilme Aluguel_filmes.ValTotal   
+&Scoped-define ENABLED-FIELDS-IN-QUERY-br-filme   
+&Scoped-define SELF-NAME br-filme
+&Scoped-define QUERY-STRING-br-filme FOR EACH Aluguel_filmes NO-LOCK         WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel, ~
+               EACH Clientes OF Alugueis NO-LOCK, ~
+               EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-br-filme OPEN QUERY {&SELF-NAME}     FOR EACH Aluguel_filmes NO-LOCK         WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel, ~
+               EACH Clientes OF Alugueis NO-LOCK, ~
+               EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION.
 &Scoped-define TABLES-IN-QUERY-br-filme Aluguel_filmes Clientes Filmes
 &Scoped-define FIRST-TABLE-IN-QUERY-br-filme Aluguel_filmes
 &Scoped-define SECOND-TABLE-IN-QUERY-br-filme Clientes
@@ -222,13 +221,13 @@ DEFINE QUERY f-cad FOR
 
 /* Browse definitions                                                   */
 DEFINE BROWSE br-filme
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS br-filme C-Win _STRUCTURED
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS br-filme C-Win _FREEFORM
   QUERY br-filme NO-LOCK DISPLAY
       Aluguel_filmes.CodItem FORMAT ">>>>9":U
       Aluguel_filmes.CodFilme FORMAT "->>>>9":U
       Aluguel_filmes.NumQuantidade FORMAT "->>>>9":U
       Filmes.ValFilme FORMAT ">>>>>>>9.99":U
-      Aluguel_filmes.ValTotal FORMAT ">>>>>>>9.99":U WIDTH 30
+      Aluguel_filmes.ValTotal FORMAT ">>>>>>>9.99":U WIDTH 20
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 110 BY 9.05
@@ -307,7 +306,7 @@ DEFINE FRAME f-cad
 IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
-         TITLE              = "<insert window title>"
+         TITLE              = "Cadastro de Aluguéis e Filmes Alugados"
          HEIGHT             = 24.48
          WIDTH              = 125.4
          MAX-HEIGHT         = 26.05
@@ -361,14 +360,14 @@ THEN C-Win:HIDDEN = no.
 
 &ANALYZE-SUSPEND _QUERY-BLOCK BROWSE br-filme
 /* Query rebuild information for BROWSE br-filme
-     _TblList          = "videloc.Aluguel_filmes,videloc.Clientes OF videloc.Alugueis,videloc.Filmes OF videloc.Aluguel_filmes"
+     _START_FREEFORM
+OPEN QUERY {&SELF-NAME}
+    FOR EACH Aluguel_filmes NO-LOCK
+        WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel,
+        EACH Clientes OF Alugueis NO-LOCK,
+        EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION.
+     _END_FREEFORM
      _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   = videloc.Aluguel_filmes.CodItem
-     _FldNameList[2]   = videloc.Aluguel_filmes.CodFilme
-     _FldNameList[3]   = videloc.Aluguel_filmes.NumQuantidade
-     _FldNameList[4]   = videloc.Filmes.ValFilme
-     _FldNameList[5]   > videloc.Aluguel_filmes.ValTotal
-"Aluguel_filmes.ValTotal" ? ? "integer" ? ? ? ? ? ? no ? no no "30" yes no no "U" "" "" "" "" "" "" 0 no 0 no no
      _Query            is OPENED
 */  /* BROWSE br-filme */
 &ANALYZE-RESUME
@@ -432,7 +431,7 @@ ON CHOOSE OF bt-addfilm IN FRAME f-cad /* Adicionar */
 DO:
     RUN prg\aluguel02.w (INPUT ROWID(alugueis),
                          INPUT IF AVAIL aluguel_filmes THEN ROWID(aluguel_filmes) ELSE ?,
-                         INPUT cOpcao).    
+                         INPUT "add").    
     RUN pi-open-query-filme.
 END.
 
@@ -470,6 +469,26 @@ DO:
         
         DELETE alugueis.
         APPLY "choose" TO bt-prev.
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-delfilm
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-delfilm C-Win
+ON CHOOSE OF bt-delfilm IN FRAME f-cad /* Eliminar */
+DO:
+    DEF VAR lResp AS LOGICAL NO-UNDO INITIAL NO.
+    MESSAGE "Deseja eliminar o filme" filmes.NomFilme "?"
+            UPDATE lResp
+            VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO
+                TITLE "Eliminacao".
+    IF  lResp = YES THEN DO:
+        FIND CURRENT aluguel_filmes EXCLUSIVE-LOCK NO-ERROR.
+        DELETE aluguel_filmes.
+        RUN pi-open-query-filme.            
     END.
 END.
 
@@ -558,6 +577,20 @@ END.
 ON CHOOSE OF bt-upd IN FRAME f-cad /* Modificar */
 DO:
   RUN pi-habilita2 ("upd").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-updfilm
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-updfilm C-Win
+ON CHOOSE OF bt-updfilm IN FRAME f-cad /* Modificar */
+DO:
+    RUN prg\aluguel02.w (INPUT ROWID(alugueis),
+                         INPUT IF AVAIL aluguel_filmes THEN ROWID(aluguel_filmes) ELSE ?,
+                         INPUT "upd").    
+    RUN pi-open-query-filme.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -784,6 +817,7 @@ PROCEDURE pi-mostra-dados :
         CLEAR FRAME f-cad.
 
     RUN pi-mostra-dados-cliente.
+    RUN pi-open-query-filme.
     
 END PROCEDURE.
 
@@ -825,7 +859,7 @@ PROCEDURE pi-open-query-filme :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
-    //OPEN QUERY br-filme
+    APPLY "open-query" TO br-filme IN FRAME f-cad.
     
 END PROCEDURE.
 

@@ -43,7 +43,10 @@ DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
 
 /* Local Variable Definitions ---                                       */
 
-DEFINE VARIABLE iseqitem  AS INTEGER NO-UNDO.
+DEFINE VARIABLE iseqitem    AS INTEGER NO-UNDO.
+DEFINE VARIABLE dValorfilme AS DECIMAL INITIAL 0 NO-UNDO.
+
+DEFINE BUFFER bf-alugueis FOR alugueis.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -66,7 +69,7 @@ DEFINE VARIABLE iseqitem  AS INTEGER NO-UNDO.
 &Scoped-define FIELDS-IN-QUERY-f-cad Aluguel_filmes.CodFilme ~
 Filmes.NomFilme Aluguel_filmes.NumQuantidade Aluguel_filmes.ValTotal 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-f-cad Aluguel_filmes.CodFilme ~
-Filmes.NomFilme Aluguel_filmes.NumQuantidade 
+Filmes.NomFilme Aluguel_filmes.NumQuantidade Aluguel_filmes.ValTotal 
 &Scoped-define ENABLED-TABLES-IN-QUERY-f-cad Aluguel_filmes Filmes
 &Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-f-cad Aluguel_filmes
 &Scoped-define SECOND-ENABLED-TABLE-IN-QUERY-f-cad Filmes
@@ -81,7 +84,7 @@ Filmes.NomFilme Aluguel_filmes.NumQuantidade
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-FIELDS Aluguel_filmes.CodFilme Filmes.NomFilme ~
-Aluguel_filmes.NumQuantidade 
+Aluguel_filmes.NumQuantidade Aluguel_filmes.ValTotal 
 &Scoped-define ENABLED-TABLES Aluguel_filmes Filmes
 &Scoped-define FIRST-ENABLED-TABLE Aluguel_filmes
 &Scoped-define SECOND-ENABLED-TABLE Filmes
@@ -129,7 +132,7 @@ DEFINE FRAME f-cad
           LABEL "Filme"
           VIEW-AS FILL-IN 
           SIZE 12 BY 1
-     Filmes.NomFilme AT ROW 1.71 COL 26 COLON-ALIGNED NO-LABEL WIDGET-ID 8
+     Filmes.NomFilme AT ROW 1.71 COL 25.6 COLON-ALIGNED NO-LABEL WIDGET-ID 8
           VIEW-AS FILL-IN 
           SIZE 49.6 BY 1
      Aluguel_filmes.NumQuantidade AT ROW 2.91 COL 13 COLON-ALIGNED WIDGET-ID 4
@@ -162,13 +165,13 @@ DEFINE FRAME f-cad
 IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
-         TITLE              = "<insert window title>"
+         TITLE              = "Filmes a Alugar"
          HEIGHT             = 10.67
          WIDTH              = 97.4
-         MAX-HEIGHT         = 16
-         MAX-WIDTH          = 97.4
-         VIRTUAL-HEIGHT     = 16
-         VIRTUAL-WIDTH      = 97.4
+         MAX-HEIGHT         = 48.05
+         MAX-WIDTH          = 384
+         VIRTUAL-HEIGHT     = 48.05
+         VIRTUAL-WIDTH      = 384
          RESIZE             = yes
          SCROLL-BARS        = no
          STATUS-AREA        = no
@@ -195,8 +198,6 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
    EXP-LABEL                                                            */
 /* SETTINGS FOR FILL-IN Filmes.NomFilme IN FRAME f-cad
    EXP-LABEL                                                            */
-/* SETTINGS FOR FILL-IN Aluguel_filmes.ValTotal IN FRAME f-cad
-   NO-ENABLE                                                            */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
@@ -245,6 +246,18 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-cancel-movie
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cancel-movie C-Win
+ON CHOOSE OF bt-cancel-movie IN FRAME f-cad /* Cancelar */
+DO:
+    APPLY "CLOSE":U TO THIS-PROCEDURE.
+    RETURN NO-APPLY.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME bt-save-movie
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-save-movie C-Win
 ON CHOOSE OF bt-save-movie IN FRAME f-cad /* Salvar */
@@ -253,6 +266,7 @@ DO:
     IF RETURN-VALUE = "NOK" THEN DO:
         RETURN NO-APPLY.         
     END.
+    APPLY "CLOSE":U TO THIS-PROCEDURE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -266,10 +280,13 @@ DO:
     FIND FIRST filmes NO-LOCK
         WHERE filmes.codfilme = INPUT FRAME f-cad aluguel_filmes.codfilme NO-ERROR.
     IF AVAIL filmes THEN DO:
-        DISPLAY filmes.nomfilme WITH FRAME f-cad.      
+        DISPLAY filmes.nomfilme 
+                WITH FRAME f-cad.      
     END.
     ELSE
        DISPLAY "" @ filmes.nomfilme WITH FRAME f-cad.
+       
+     APPLY "leave" TO aluguel_filmes.NumQuantidade IN FRAME f-cad.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -280,11 +297,10 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Aluguel_filmes.NumQuantidade C-Win
 ON LEAVE OF Aluguel_filmes.NumQuantidade IN FRAME f-cad /* Quantidade */
 DO:
-    DEF VAR dValorfilme AS DECIMAL INITIAL 0 NO-UNDO.
     IF AVAIL filmes THEN DO:
         ASSIGN dValorfilme = filmes.valfilme * INPUT FRAME f-cad aluguel_filmes.NumQuantidade.                
     END.
-    DISPLAY dValorfilme @ aluguel_filmes.valtotal.
+    DISPLAY dValorfilme @ aluguel_filmes.valtotal WITH FRAME f-cad.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -370,7 +386,7 @@ PROCEDURE enable_UI :
     DISPLAY Filmes.NomFilme 
       WITH FRAME f-cad IN WINDOW C-Win.
   ENABLE Aluguel_filmes.CodFilme Filmes.NomFilme Aluguel_filmes.NumQuantidade 
-         bt-save-movie bt-cancel-movie 
+         Aluguel_filmes.ValTotal bt-save-movie bt-cancel-movie 
       WITH FRAME f-cad IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-f-cad}
   VIEW C-Win.
@@ -387,15 +403,22 @@ PROCEDURE pi-mostra-dados :
   Notes:       
 ------------------------------------------------------------------------------*/
 
+    DISABLE filmes.NomFilme
+            aluguel_filmes.ValTotal
+            WITH FRAME f-cad.
+
     RUN pi-posiciona-registro.
     
-    IF AVAIL aluguel_filmes THEN DO:
+    IF  pOpcao = "upd"
+    AND AVAIL aluguel_filmes THEN DO:
         DISPLAY aluguel_filmes.codfilme
                 aluguel_filmes.NumQuantidade
                 aluguel_filmes.ValTotal
                 WITH FRAME f-cad.
         APPLY "leave" TO aluguel_filmes.codfilme IN FRAME f-cad.                         
     END.
+    ELSE
+        CLEAR FRAME f-cad.
 
 END PROCEDURE.
 
@@ -429,7 +452,8 @@ PROCEDURE pi-save :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
-
+    DEFINE VARIABLE dValAluguel AS DECIMAL NO-UNDO.
+    
     FIND FIRST filmes
         WHERE filmes.codfilme = INPUT FRAME f-cad aluguel_filmes.codfilme NO-LOCK NO-ERROR.
     IF NOT AVAIL filmes THEN DO:
@@ -455,6 +479,17 @@ PROCEDURE pi-save :
               aluguel_filmes.numquantidade = INPUT FRAME f-cad aluguel_filmes.numquantidade
               aluguel_filmes.valtotal = INPUT FRAME f-cad aluguel_filmes.valtotal.
     END.    
+    
+    ASSIGN dValAluguel = 0.
+    FOR EACH aluguel_filmes
+        WHERE aluguel_filmes.codaluguel = alugueis.codaluguel NO-LOCK:
+        ASSIGN dValAluguel = dValAluguel + aluguel_filmes.valtotal.
+    END.
+    FIND FIRST bf-alugueis EXCLUSIVE-LOCK
+        WHERE bf-alugueis.codaluguel = alugueis.codaluguel NO-ERROR.
+    IF AVAIL bf-alugueis THEN DO:
+        ASSIGN bf-alugueis.valAluguel = dValAluguel. 
+    END.
     
     RETURN "OK".
 
