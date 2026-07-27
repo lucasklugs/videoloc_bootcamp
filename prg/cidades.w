@@ -337,7 +337,7 @@ DO:
             WHERE clientes.CodCidade = cidades.CodCidade NO-ERROR.
         IF AVAIL clientes THEN DO:
             MESSAGE "Cidade em uso por cliente."
-                VIEW-AS ALERT-BOX INFORMATION BUTTONS OK.
+                VIEW-AS ALERT-BOX ERROR BUTTONS OK.
             RETURN NO-APPLY.           
         END.
         ELSE DO:
@@ -712,6 +712,4 @@ END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-
-
 

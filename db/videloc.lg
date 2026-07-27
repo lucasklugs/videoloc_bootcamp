@@ -475,3 +475,20 @@
 [2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (15109) At Database close the number of live transactions is 0. 
 [2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (15743) Before Image Log Completion at Block 35 Offset 3362. 
 [2026/07/27@11:38:30.536-0300] P-9060       T-7036  I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:38:50 2026
+[2026/07/27@11:38:50.590-0300] P-14476      T-29460 I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:38:50.590-0300] P-14476      T-29460 I ABL      : (15321) Before Image Log Initialization at block 35  offset 3362. 
+[2026/07/27@11:38:50.595-0300] P-14476      T-29460 I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:43:41.313-0300] P-14476      T-29460 I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:43:41.313-0300] P-14476      T-29460 I ABL      : (15743) Before Image Log Completion at Block 35 Offset 6824. 
+[2026/07/27@11:43:41.314-0300] P-14476      T-29460 I ABL      : (334)   Single-user session end. 
+
+                Mon Jul 27 11:45:51 2026
+[2026/07/27@11:45:51.845-0300] P-22180      T-6944  I ABL      : (451)   Single-user session begin for Lucas on CON:. 
+[2026/07/27@11:45:51.845-0300] P-22180      T-6944  I ABL      : (5194)  Event Logger error: Could not find 'PROMSGS.DLL'. 
+[2026/07/27@11:45:51.845-0300] P-22180      T-6944  I ABL      : (15321) Before Image Log Initialization at block 35  offset 6824. 
+[2026/07/27@11:45:51.850-0300] P-22180      T-6944  I ABL      : (7129)  Usr 0 set name to Lucas. 
+[2026/07/27@11:53:10.367-0300] P-22180      T-6944  I ABL      : (15109) At Database close the number of live transactions is 0. 
+[2026/07/27@11:53:10.367-0300] P-22180      T-6944  I ABL      : (15743) Before Image Log Completion at Block 37 Offset 1030. 
+[2026/07/27@11:53:10.367-0300] P-22180      T-6944  I ABL      : (334)   Single-user session end. 
