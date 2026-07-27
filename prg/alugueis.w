@@ -491,6 +491,16 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-export
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
+ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
+DO:
+    RUN prg\procedures\aluguel-json.p.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &Scoped-define SELF-NAME bt-exit
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
 ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
@@ -1000,4 +1010,5 @@ END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
+
 
