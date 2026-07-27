@@ -190,10 +190,10 @@ DEFINE FRAME f-cad
      Cidades.CodCidade AT ROW 5.76 COL 12 COLON-ALIGNED WIDGET-ID 56
           VIEW-AS FILL-IN 
           SIZE 6 BY 1
-     Cidades.NomCidade AT ROW 7.43 COL 12 COLON-ALIGNED WIDGET-ID 46
+     Cidades.NomCidade AT ROW 7 COL 12 COLON-ALIGNED WIDGET-ID 46
           VIEW-AS FILL-IN 
           SIZE 26 BY 1
-     Cidades.CodUF AT ROW 9.1 COL 12 COLON-ALIGNED WIDGET-ID 54
+     Cidades.CodUF AT ROW 8.24 COL 12 COLON-ALIGNED WIDGET-ID 54
           VIEW-AS FILL-IN 
           SIZE 6.4 BY 1
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
@@ -692,7 +692,7 @@ PROCEDURE pi-save :
                 WHERE bf-cidades.CodCidade = INPUT FRAME f-cad cidades.CodCidade NO-ERROR.
             IF AVAIL bf-cidades THEN DO:
                 MESSAGE "Código de cidade já existente!"
-                        VIEW-AS ALERT-BOX.
+                        VIEW-AS ALERT-BOX ERROR.
                 APPLY "entry" TO cidades.CodCidade IN FRAME f-cad.
                 RETURN "NOK".
             END.            

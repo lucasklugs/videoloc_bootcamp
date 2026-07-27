@@ -190,24 +190,24 @@ DEFINE FRAME f-cad
           VIEW-AS FILL-IN 
           SIZE 7 BY 1
           BGCOLOR 15 
-     Filmes.NomFilme AT ROW 7.43 COL 14 COLON-ALIGNED WIDGET-ID 84
+     Filmes.NomFilme AT ROW 7.24 COL 14 COLON-ALIGNED WIDGET-ID 84
           VIEW-AS FILL-IN 
           SIZE 45 BY 1
           BGCOLOR 15 
-     Filmes.Genero AT ROW 8.86 COL 14 COLON-ALIGNED WIDGET-ID 86
+     Filmes.Genero AT ROW 8.52 COL 14 COLON-ALIGNED WIDGET-ID 86
           VIEW-AS FILL-IN 
           SIZE 30 BY 1
           BGCOLOR 15 
-     Filmes.ValFilme AT ROW 10.29 COL 14 COLON-ALIGNED WIDGET-ID 88
+     Filmes.ValFilme AT ROW 9.81 COL 14 COLON-ALIGNED WIDGET-ID 88
           VIEW-AS FILL-IN 
           SIZE 22 BY 1
           BGCOLOR 15 
-     Filmes.Sinopse AT ROW 11.71 COL 16 NO-LABEL WIDGET-ID 96
+     Filmes.Sinopse AT ROW 11.1 COL 16 NO-LABEL WIDGET-ID 96
           VIEW-AS EDITOR SCROLLBAR-VERTICAL
           SIZE 96 BY 6.19
           BGCOLOR 15 
      "Sinopse:" VIEW-AS TEXT
-          SIZE 9 BY .95 AT ROW 11.81 COL 6.6 WIDGET-ID 100
+          SIZE 9 BY .95 AT ROW 11.19 COL 6.6 WIDGET-ID 100
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
      RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
@@ -712,7 +712,7 @@ PROCEDURE pi-save :
                 WHERE bf-filmes.CodFilme = INPUT FRAME f-cad filmes.CodFilme NO-ERROR.
             IF AVAIL bf-filmes THEN DO:
                 MESSAGE "Código de filme já existente!"
-                        VIEW-AS ALERT-BOX.
+                        VIEW-AS ALERT-BOX ERROR.
                 APPLY "entry" TO filmes.CodFilme IN FRAME f-cad.
                 RETURN "NOK".
             END.            

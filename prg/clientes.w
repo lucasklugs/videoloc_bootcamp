@@ -56,28 +56,24 @@ DEFINE BUFFER bf-clientes FOR clientes.
 &Scoped-define DB-AWARE no
 
 /* Name of designated FRAME-NAME and/or first browse and/or first query */
-&Scoped-define FRAME-NAME DEFAULT-FRAME
+&Scoped-define FRAME-NAME f-cad
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
 &Scoped-define INTERNAL-TABLES Cidades
 
-/* Definitions for FRAME DEFAULT-FRAME                                  */
-&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.NomCidade 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Cidades.NomCidade 
-&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK
-&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Cidades SHARE-LOCK.
-&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Cidades
-&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Cidades
+/* Definitions for FRAME f-cad                                          */
+&Scoped-define FIELDS-IN-QUERY-f-cad Cidades.NomCidade 
+&Scoped-define QUERY-STRING-f-cad FOR EACH Cidades SHARE-LOCK
+&Scoped-define OPEN-QUERY-f-cad OPEN QUERY f-cad FOR EACH Cidades SHARE-LOCK.
+&Scoped-define TABLES-IN-QUERY-f-cad Cidades
+&Scoped-define FIRST-TABLE-IN-QUERY-f-cad Cidades
 
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-FIELDS Clientes.CodCliente Clientes.NomCliente ~
-Clientes.Endereco Clientes.CodCidade Cidades.NomCidade Clientes.Observacao 
-&Scoped-define ENABLED-TABLES Clientes Cidades
+Clientes.Endereco Clientes.CodCidade Clientes.Observacao 
+&Scoped-define ENABLED-TABLES Clientes
 &Scoped-define FIRST-ENABLED-TABLE Clientes
-&Scoped-define SECOND-ENABLED-TABLE Cidades
 &Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
 bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-exit 
 &Scoped-Define DISPLAYED-FIELDS Clientes.CodCliente Clientes.NomCliente ~
@@ -168,13 +164,13 @@ DEFINE RECTANGLE RECT-6
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
-DEFINE QUERY DEFAULT-FRAME FOR 
+DEFINE QUERY f-cad FOR 
       Cidades SCROLLING.
 &ANALYZE-RESUME
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME DEFAULT-FRAME
+DEFINE FRAME f-cad
      bt-first AT ROW 1.81 COL 3.4 WIDGET-ID 6
      bt-prev AT ROW 1.81 COL 9 WIDGET-ID 20
      bt-next AT ROW 1.81 COL 14.4 WIDGET-ID 22
@@ -198,18 +194,20 @@ DEFINE FRAME DEFAULT-FRAME
           VIEW-AS FILL-IN 
           SIZE 52 BY 1
           BGCOLOR 15 
-     Clientes.CodCidade AT ROW 9.57 COL 17 COLON-ALIGNED WIDGET-ID 76
+     Clientes.CodCidade AT ROW 9.57 COL 17 COLON-ALIGNED NO-LABEL WIDGET-ID 76
           VIEW-AS FILL-IN 
-          SIZE 12 BY 1.19
+          SIZE 12 BY 1
           BGCOLOR 15 
      Cidades.NomCidade AT ROW 9.57 COL 30 COLON-ALIGNED NO-LABEL WIDGET-ID 78
           VIEW-AS FILL-IN 
-          SIZE 22 BY 1.19
+          SIZE 22 BY 1
           BGCOLOR 15 
-     Clientes.Observacao AT ROW 11 COL 16 COLON-ALIGNED WIDGET-ID 80
+     Clientes.Observacao AT ROW 10.81 COL 17 COLON-ALIGNED WIDGET-ID 80
           VIEW-AS FILL-IN 
-          SIZE 66 BY 1.19
+          SIZE 66 BY 1
           BGCOLOR 15 
+     "Cidade:" VIEW-AS TEXT
+          SIZE 7.2 BY 1 AT ROW 9.57 COL 11.4 WIDGET-ID 82
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
      RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
@@ -262,10 +260,10 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR WINDOW C-Win
   VISIBLE,,RUN-PERSISTENT                                               */
-/* SETTINGS FOR FRAME DEFAULT-FRAME
+/* SETTINGS FOR FRAME f-cad
    FRAME-NAME                                                           */
-/* SETTINGS FOR FILL-IN Cidades.NomCidade IN FRAME DEFAULT-FRAME
-   EXP-LABEL                                                            */
+/* SETTINGS FOR FILL-IN Cidades.NomCidade IN FRAME f-cad
+   NO-ENABLE EXP-LABEL                                                  */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
 
@@ -275,11 +273,11 @@ THEN C-Win:HIDDEN = no.
 
 /* Setting information for Queries and Browse Widgets fields            */
 
-&ANALYZE-SUSPEND _QUERY-BLOCK FRAME DEFAULT-FRAME
-/* Query rebuild information for FRAME DEFAULT-FRAME
+&ANALYZE-SUSPEND _QUERY-BLOCK FRAME f-cad
+/* Query rebuild information for FRAME f-cad
      _TblList          = "videloc.Cidades"
      _Query            is OPENED
-*/  /* FRAME DEFAULT-FRAME */
+*/  /* FRAME f-cad */
 &ANALYZE-RESUME
 
  
@@ -308,6 +306,207 @@ DO:
   /* This event will close the window and terminate the procedure.  */
   APPLY "CLOSE":U TO THIS-PROCEDURE.
   RETURN NO-APPLY.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-add
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-add C-Win
+ON CHOOSE OF bt-add IN FRAME f-cad /* Adicionar */
+DO:
+   ASSIGN iCodCliente = NEXT-VALUE(SeqCliente).
+   CLEAR FRAME f-cad.
+   DISP iCodCliente @ Clientes.CodCliente  WITH FRAME f-cad.
+   RUN pi-habilita2 (INPUT "add").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-cancel
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cancel C-Win
+ON CHOOSE OF bt-cancel IN FRAME f-cad /* Cancelar */
+DO:
+    RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-del
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-del C-Win
+ON CHOOSE OF bt-del IN FRAME f-cad /* Eliminar */
+DO:
+    DEF VAR lResp AS LOGICAL NO-UNDO INITIAL NO.
+    MESSAGE "Deseja eliminar o filme" clientes.NomCliente "?"
+            UPDATE lResp
+            VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO
+                TITLE "Eliminacao".
+    IF  lResp = YES THEN DO:
+        FIND FIRST alugueis NO-LOCK 
+            WHERE alugueis.CodCliente = Clientes.CodCliente NO-ERROR.
+        IF AVAIL aluguel_filmes THEN DO:
+            MESSAGE "Há alugueis ativos com este filme."
+                VIEW-AS ALERT-BOX INFORMATION BUTTONS OK.
+            RETURN NO-APPLY.           
+        END.
+        ELSE DO:
+            FIND CURRENT clientes EXCLUSIVE-LOCK NO-ERROR.
+            DELETE clientes.
+            APPLY "choose" TO bt-prev.            
+        END.
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-exit
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
+ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
+DO:
+   APPLY "close".  
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-export
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
+ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
+DO:
+    RUN prg\procedures\clientes-json.p.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-first
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-first C-Win
+ON CHOOSE OF bt-first IN FRAME f-cad /* << */
+DO:
+    RUN pi-posiciona-registro (INPUT "first").
+    IF  AVAIL clientes THEN DO:
+        DISP clientes WITH FRAME f-cad.
+        
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+    IF AVAIL cidades THEN DO:
+        DISPLAY cidades.nomcidade WITH FRAME f-cad.
+        
+    END.
+        
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-last
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-last C-Win
+ON CHOOSE OF bt-last IN FRAME f-cad /* >> */
+DO:
+    RUN pi-posiciona-registro (INPUT "last").
+    IF  AVAIL clientes THEN DO:
+        DISP clientes WITH FRAME f-cad.
+    END.
+    ELSE
+        CLEAR FRAME f-cad.
+    IF AVAIL cidades THEN DO:
+        DISPLAY cidades.nomcidade WITH FRAME f-cad.
+        
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-next
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-next C-Win
+ON CHOOSE OF bt-next IN FRAME f-cad /* > */
+DO:
+    RUN pi-posiciona-registro (INPUT "next").
+    IF  AVAIL clientes THEN DO:
+        DISP clientes WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+       
+    IF AVAIL cidades THEN DO:
+        DISPLAY cidades.nomcidade WITH FRAME f-cad.
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-prev
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-prev C-Win
+ON CHOOSE OF bt-prev IN FRAME f-cad /* < */
+DO:
+    RUN pi-posiciona-registro (INPUT "prev").
+    IF  AVAIL clientes THEN DO:
+        DISP clientes WITH FRAME f-cad.
+    END.
+    ELSE
+       CLEAR FRAME f-cad.
+    IF AVAIL cidades THEN DO:
+        DISPLAY cidades.nomcidade WITH FRAME f-cad. 
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-save
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-save C-Win
+ON CHOOSE OF bt-save IN FRAME f-cad /* Salvar */
+DO:
+   RUN pi-save (cOpcao).
+   IF RETURN-VALUE = "NOK" THEN DO:
+       RETURN NO-APPLY.
+   END.
+   
+   RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-upd
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-upd C-Win
+ON CHOOSE OF bt-upd IN FRAME f-cad /* Modificar */
+DO:
+  RUN pi-habilita2 ("upd").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Clientes.CodCidade
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Clientes.CodCidade C-Win
+ON LEAVE OF Clientes.CodCidade IN FRAME f-cad /* Código */
+DO:
+  FIND FIRST cidades
+    WHERE cidades.codcidade = INPUT FRAME f-cad clientes.codcidade NO-LOCK NO-ERROR.
+  IF AVAIL cidades THEN DO:
+    DISPLAY cidades.nomcidade WITH FRAME f-cad.      
+  END.
+  ELSE
+    DISPLAY "" @ cidades.nomcidade WITH FRAME f-cad.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -384,22 +583,215 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
 
-  {&OPEN-QUERY-DEFAULT-FRAME}
-  GET FIRST DEFAULT-FRAME.
+  {&OPEN-QUERY-f-cad}
+  GET FIRST f-cad.
   IF AVAILABLE Cidades THEN 
     DISPLAY Cidades.NomCidade 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+      WITH FRAME f-cad IN WINDOW C-Win.
   IF AVAILABLE Clientes THEN 
     DISPLAY Clientes.CodCliente Clientes.NomCliente Clientes.Endereco 
           Clientes.CodCidade Clientes.Observacao 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+      WITH FRAME f-cad IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
          bt-save bt-cancel bt-export bt-exit Clientes.CodCliente 
          Clientes.NomCliente Clientes.Endereco Clientes.CodCidade 
-         Cidades.NomCidade Clientes.Observacao 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
-  {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
+         Clientes.Observacao 
+      WITH FRAME f-cad IN WINDOW C-Win.
+  {&OPEN-BROWSERS-IN-QUERY-f-cad}
   VIEW C-Win.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita C-Win 
+PROCEDURE pi-habilita :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    ASSIGN cOpcao = pOpcao.
+    
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        DISABLE bt-first bt-prev bt-next bt-last
+                bt-add bt-upd bt-del bt-export bt-exit
+                WITH FRAME f-cad.
+        ENABLE bt-save bt-cancel WITH FRAME f-cad.
+        ENABLE Clientes.CodCliente 
+               Clientes.Endereco 
+               Clientes.NomCliente 
+               Clientes.Observacao 
+               Clientes.CodCidade
+               WITH FRAME f-cad.
+        DISABLE Cidades.Nomcidade WITH FRAME f-cad.
+        IF pOpcao = "upd" THEN
+            DISABLE Clientes.CodCliente WITH FRAME f-cad.
+    END.
+    ELSE DO:
+        DISABLE ALL WITH FRAME f-cad.
+        ENABLE bt-first bt-prev bt-next bt-last
+               bt-add bt-upd bt-del bt-export bt-exit 
+               WITH FRAME f-cad.
+    END.
+
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-habilita2 C-Win 
+PROCEDURE pi-habilita2 :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    DEF VAR lHabilita AS LOGICAL NO-UNDO INITIAL FALSE.
+
+    ASSIGN cOpcao = pOpcao.
+
+    IF  pOpcao = "add" 
+    OR  pOpcao = "upd" THEN DO:
+        ASSIGN lHabilita = TRUE.
+    END.
+    
+    ASSIGN bt-first:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-prev:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-next:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-last:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-add:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-upd:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-del:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-export:SENSITIVE IN FRAME f-cad = NOT lHabilita
+           bt-exit:SENSITIVE IN FRAME f-cad = NOT lHabilita.
+           
+    ASSIGN bt-save:SENSITIVE IN FRAME f-cad = lHabilita
+           bt-cancel:SENSITIVE IN FRAME f-cad = lHabilita.
+
+    ASSIGN Clientes.Endereco:SENSITIVE IN FRAME f-cad = lHabilita
+           Clientes.NomCliente:SENSITIVE IN FRAME f-cad = lHabilita 
+           Clientes.Observacao:SENSITIVE IN FRAME f-cad = lHabilita 
+           Clientes.CodCidade:SENSITIVE IN FRAME f-cad = lHabilita. 
+
+    IF  pOpcao = "add" THEN
+        ASSIGN Clientes.CodCliente:SENSITIVE IN FRAME f-cad = TRUE.
+    ELSE
+        ASSIGN Clientes.CodCliente:SENSITIVE IN FRAME f-cad = FALSE.
+
+    IF  cOpcao = "" THEN DO:
+        FIND CURRENT clientes NO-LOCK NO-ERROR.
+        IF AVAIL clientes THEN DO:
+            DISPLAY clientes WITH FRAME f-cad.          
+        END.
+        ELSE 
+            APPLY "choose" TO bt-prev.  
+    END.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-posiciona-registro C-Win 
+PROCEDURE pi-posiciona-registro :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+DEF INPUT PARAM pNavega AS CHAR NO-UNDO.
+    
+    CASE pNavega:
+        WHEN "first" THEN DO:
+            FIND FIRST clientes NO-LOCK NO-ERROR.
+        END.
+        WHEN "last" THEN DO:
+            FIND LAST clientes NO-LOCK NO-ERROR.
+        END.
+        WHEN "next" THEN DO:
+            FIND NEXT clientes NO-LOCK NO-ERROR.
+            IF  NOT AVAIL clientes THEN DO:
+                APPLY "choose" TO bt-first IN FRAME f-cad.
+            END.
+        END.
+        WHEN "prev" THEN DO:
+            FIND PREV clientes NO-LOCK NO-ERROR.             
+            IF  NOT AVAIL clientes THEN DO:
+                RUN pi-posiciona-registro (INPUT "last").
+            END.
+        END.
+    END CASE.
+    
+    IF AVAIL clientes THEN
+        FIND FIRST cidades 
+           WHERE cidade.codcidade = clientes.codcidade NO-LOCK NO-ERROR.
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-save C-Win 
+PROCEDURE pi-save :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+    DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
+
+    CASE pOpcao:
+        WHEN "add" THEN DO WITH FRAME f-cad:
+        
+            FIND FIRST bf-clientes NO-LOCK
+                WHERE bf-clientes.CodCliente = INPUT 
+                    FRAME f-cad clientes.CodCliente NO-ERROR.
+            IF AVAIL bf-clientes THEN DO:
+                MESSAGE "Código de cliente já existente!"
+                        VIEW-AS ALERT-BOX ERROR.
+                APPLY "entry" TO clientes.CodCliente IN FRAME f-cad.
+                RETURN "NOK".
+            END.            
+        
+            FIND FIRST cidades
+                WHERE cidades.codcidade = INPUT FRAME f-cad clientes.codcidade NO-ERROR.
+            IF NOT AVAIL cidades THEN DO:
+                MESSAGE "Cidade não cadastrada!"
+                        VIEW-AS ALERT-BOX ERROR.
+                APPLY "entry" TO clientes.codcidade IN FRAME f-cad.
+                RETURN "NOK".                                
+            END.
+        
+            CREATE clientes.
+            ASSIGN clientes.CodCliente = INPUT FRAME f-cad clientes.CodCliente.
+            ASSIGN clientes EXCEPT CodCliente.
+        END.
+        WHEN "upd" THEN DO WITH FRAME f-cad:
+            FIND FIRST cidades
+                WHERE cidades.codcidade = INPUT FRAME f-cad clientes.codcidade NO-ERROR.
+            IF NOT AVAIL cidades THEN DO:
+                MESSAGE "Cidade não cadastrada!"
+                        VIEW-AS ALERT-BOX ERROR.
+                APPLY "entry" TO clientes.codcidade IN FRAME f-cad.
+                RETURN "NOK".                                
+            END.
+            
+            FIND CURRENT clientes EXCLUSIVE-LOCK NO-ERROR.
+            ASSIGN clientes EXCEPT CodCliente.
+        END.
+    END CASE.
+    
+    RETURN "OK".
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
