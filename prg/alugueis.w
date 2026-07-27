@@ -60,22 +60,19 @@ DEFINE BUFFER bf-alugueis FOR alugueis.
 &Scoped-define BROWSE-NAME br-filme
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES Aluguel_filmes Clientes Filmes Alugueis
+&Scoped-define INTERNAL-TABLES Aluguel_filmes Filmes Alugueis Clientes Cidades
 
 /* Definitions for BROWSE br-filme                                      */
 &Scoped-define FIELDS-IN-QUERY-br-filme Aluguel_filmes.CodItem Aluguel_filmes.CodFilme Aluguel_filmes.NumQuantidade Filmes.ValFilme Aluguel_filmes.ValTotal   
 &Scoped-define ENABLED-FIELDS-IN-QUERY-br-filme   
 &Scoped-define SELF-NAME br-filme
-&Scoped-define QUERY-STRING-br-filme FOR EACH Aluguel_filmes NO-LOCK         WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel, ~
-               EACH Clientes OF Alugueis NO-LOCK, ~
-               EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-br-filme OPEN QUERY {&SELF-NAME}     FOR EACH Aluguel_filmes NO-LOCK         WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel, ~
-               EACH Clientes OF Alugueis NO-LOCK, ~
-               EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-br-filme Aluguel_filmes Clientes Filmes
+&Scoped-define QUERY-STRING-br-filme FOR EACH Aluguel_filmes NO-LOCK         WHERE AVAILABLE Alugueis AND Aluguel_filmes.CodAluguel = Alugueis.CodAluguel, ~
+               EACH Filmes NO-LOCK WHERE Filmes.CodFilme = Aluguel_filmes.CodFilme INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-br-filme OPEN QUERY {&SELF-NAME}     FOR EACH Aluguel_filmes NO-LOCK         WHERE AVAILABLE Alugueis AND Aluguel_filmes.CodAluguel = Alugueis.CodAluguel, ~
+               EACH Filmes NO-LOCK WHERE Filmes.CodFilme = Aluguel_filmes.CodFilme INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-br-filme Aluguel_filmes Filmes
 &Scoped-define FIRST-TABLE-IN-QUERY-br-filme Aluguel_filmes
-&Scoped-define SECOND-TABLE-IN-QUERY-br-filme Clientes
-&Scoped-define THIRD-TABLE-IN-QUERY-br-filme Filmes
+&Scoped-define SECOND-TABLE-IN-QUERY-br-filme Filmes
 
 
 /* Definitions for FRAME f-cad                                          */
@@ -212,7 +209,6 @@ DEFINE RECTANGLE RECT-7
 &ANALYZE-SUSPEND
 DEFINE QUERY br-filme FOR 
       Aluguel_filmes, 
-      Clientes, 
       Filmes SCROLLING.
 
 DEFINE QUERY f-cad FOR 
@@ -363,9 +359,8 @@ THEN C-Win:HIDDEN = no.
      _START_FREEFORM
 OPEN QUERY {&SELF-NAME}
     FOR EACH Aluguel_filmes NO-LOCK
-        WHERE Aluguel_filmes.codAluguel = Alugueis.codAluguel,
-        EACH Clientes OF Alugueis NO-LOCK,
-        EACH Filmes OF Aluguel_filmes NO-LOCK INDEXED-REPOSITION.
+        WHERE AVAILABLE Alugueis AND Aluguel_filmes.CodAluguel = Alugueis.CodAluguel,
+        EACH Filmes NO-LOCK WHERE Filmes.CodFilme = Aluguel_filmes.CodFilme INDEXED-REPOSITION.
      _END_FREEFORM
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _Query            is OPENED
@@ -855,12 +850,24 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pi-open-query-filme C-Win 
 PROCEDURE pi-open-query-filme :
 /*------------------------------------------------------------------------------
-  Purpose:     
-  Parameters:  <none>
-  Notes:       
+  Purpose: Reabre o browse de filmes conforme o aluguel corrente da tela.
 ------------------------------------------------------------------------------*/
-    APPLY "open-query" TO br-filme IN FRAME f-cad.
-    
+    IF AVAILABLE Alugueis THEN DO:
+        OPEN QUERY br-filme
+            FOR EACH Aluguel_filmes NO-LOCK
+                WHERE Aluguel_filmes.CodAluguel = Alugueis.CodAluguel,
+                EACH Filmes NO-LOCK
+                    WHERE Filmes.CodFilme = Aluguel_filmes.CodFilme
+                    INDEXED-REPOSITION.
+    END.
+    ELSE DO:
+        OPEN QUERY br-filme
+            FOR EACH Aluguel_filmes NO-LOCK
+                WHERE Aluguel_filmes.CodAluguel = -1,
+                EACH Filmes NO-LOCK
+                    WHERE Filmes.CodFilme = Aluguel_filmes.CodFilme
+                    INDEXED-REPOSITION.
+    END.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

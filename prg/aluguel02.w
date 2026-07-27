@@ -222,7 +222,7 @@ THEN C-Win:HIDDEN = no.
 
 &Scoped-define SELF-NAME C-Win
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL C-Win C-Win
-ON END-ERROR OF C-Win /* <insert window title> */
+ON END-ERROR OF C-Win /* Filmes a Alugar */
 OR ENDKEY OF {&WINDOW-NAME} ANYWHERE DO:
   /* This case occurs when the user presses the "Esc" key.
      In a persistently run window, just ignore this.  If we did not, the
@@ -235,7 +235,7 @@ END.
 
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL C-Win C-Win
-ON WINDOW-CLOSE OF C-Win /* <insert window title> */
+ON WINDOW-CLOSE OF C-Win /* Filmes a Alugar */
 DO:
   /* This event will close the window and terminate the procedure.  */
   APPLY "CLOSE":U TO THIS-PROCEDURE.
@@ -475,7 +475,7 @@ PROCEDURE pi-save :
     END.
     ELSE DO:
        FIND CURRENT aluguel_filmes EXCLUSIVE-LOCK NO-ERROR.
-       ASSIGN aluguel_filmes.coditem = iseqitem
+       ASSIGN aluguel_filmes.codfilme = INPUT FRAME f-cad aluguel_filmes.codfilme
               aluguel_filmes.numquantidade = INPUT FRAME f-cad aluguel_filmes.numquantidade
               aluguel_filmes.valtotal = INPUT FRAME f-cad aluguel_filmes.valtotal.
     END.    
