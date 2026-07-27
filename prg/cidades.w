@@ -197,7 +197,7 @@ DEFINE FRAME f-cad
           VIEW-AS FILL-IN 
           SIZE 6.4 BY 1
      RECT-5 AT ROW 1.24 COL 2 WIDGET-ID 2
-     RECT-6 AT ROW 4.81 COL 2 WIDGET-ID 4
+     RECT-6 AT ROW 4.81 COL 3 WIDGET-ID 4
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
@@ -367,7 +367,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
 ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
 DO:
-   RUN prg\cidade-json.p.
+   RUN prg\procedures\cidade-json.p.
 END.
 
 /* _UIB-CODE-BLOCK-END */

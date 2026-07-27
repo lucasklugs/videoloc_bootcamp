@@ -56,22 +56,22 @@ DEFINE BUFFER bf-filmes FOR filmes.
 &Scoped-define DB-AWARE no
 
 /* Name of designated FRAME-NAME and/or first browse and/or first query */
-&Scoped-define FRAME-NAME DEFAULT-FRAME
+&Scoped-define FRAME-NAME f-cad
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
 &Scoped-define INTERNAL-TABLES Filmes
 
-/* Definitions for FRAME DEFAULT-FRAME                                  */
-&Scoped-define FIELDS-IN-QUERY-DEFAULT-FRAME Filmes.CodFilme ~
+/* Definitions for FRAME f-cad                                          */
+&Scoped-define FIELDS-IN-QUERY-f-cad Filmes.CodFilme Filmes.NomFilme ~
+Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-f-cad Filmes.CodFilme ~
 Filmes.NomFilme Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-DEFAULT-FRAME Filmes.CodFilme ~
-Filmes.NomFilme Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
-&Scoped-define ENABLED-TABLES-IN-QUERY-DEFAULT-FRAME Filmes
-&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-DEFAULT-FRAME Filmes
-&Scoped-define QUERY-STRING-DEFAULT-FRAME FOR EACH Filmes SHARE-LOCK
-&Scoped-define OPEN-QUERY-DEFAULT-FRAME OPEN QUERY DEFAULT-FRAME FOR EACH Filmes SHARE-LOCK.
-&Scoped-define TABLES-IN-QUERY-DEFAULT-FRAME Filmes
-&Scoped-define FIRST-TABLE-IN-QUERY-DEFAULT-FRAME Filmes
+&Scoped-define ENABLED-TABLES-IN-QUERY-f-cad Filmes
+&Scoped-define FIRST-ENABLED-TABLE-IN-QUERY-f-cad Filmes
+&Scoped-define QUERY-STRING-f-cad FOR EACH Filmes SHARE-LOCK
+&Scoped-define OPEN-QUERY-f-cad OPEN QUERY f-cad FOR EACH Filmes SHARE-LOCK.
+&Scoped-define TABLES-IN-QUERY-f-cad Filmes
+&Scoped-define FIRST-TABLE-IN-QUERY-f-cad Filmes
 
 
 /* Standard List Definitions                                            */
@@ -168,13 +168,13 @@ DEFINE RECTANGLE RECT-6
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
-DEFINE QUERY DEFAULT-FRAME FOR 
+DEFINE QUERY f-cad FOR 
       Filmes SCROLLING.
 &ANALYZE-RESUME
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME DEFAULT-FRAME
+DEFINE FRAME f-cad
      bt-first AT ROW 1.81 COL 3.4 WIDGET-ID 6
      bt-prev AT ROW 1.81 COL 9 WIDGET-ID 20
      bt-next AT ROW 1.81 COL 14.4 WIDGET-ID 22
@@ -203,8 +203,8 @@ DEFINE FRAME DEFAULT-FRAME
           SIZE 22 BY 1
           BGCOLOR 15 
      Filmes.Sinopse AT ROW 11.71 COL 16 NO-LABEL WIDGET-ID 96
-          VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
-          SIZE 69 BY 4.52
+          VIEW-AS EDITOR SCROLLBAR-VERTICAL
+          SIZE 96 BY 6.19
           BGCOLOR 15 
      "Sinopse:" VIEW-AS TEXT
           SIZE 9 BY .95 AT ROW 11.81 COL 6.6 WIDGET-ID 100
@@ -260,7 +260,7 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR WINDOW C-Win
   VISIBLE,,RUN-PERSISTENT                                               */
-/* SETTINGS FOR FRAME DEFAULT-FRAME
+/* SETTINGS FOR FRAME f-cad
    FRAME-NAME                                                           */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
@@ -271,11 +271,11 @@ THEN C-Win:HIDDEN = no.
 
 /* Setting information for Queries and Browse Widgets fields            */
 
-&ANALYZE-SUSPEND _QUERY-BLOCK FRAME DEFAULT-FRAME
-/* Query rebuild information for FRAME DEFAULT-FRAME
+&ANALYZE-SUSPEND _QUERY-BLOCK FRAME f-cad
+/* Query rebuild information for FRAME f-cad
      _TblList          = "videloc.Filmes"
      _Query            is OPENED
-*/  /* FRAME DEFAULT-FRAME */
+*/  /* FRAME f-cad */
 &ANALYZE-RESUME
 
  
@@ -310,9 +310,85 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-add
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-add C-Win
+ON CHOOSE OF bt-add IN FRAME f-cad /* Adicionar */
+DO:
+   ASSIGN iCodFilme = NEXT-VALUE(SeqFilme).
+   CLEAR FRAME f-cad.
+   DISP iCodFilme @ filmes.CodFilme WITH FRAME f-cad.
+   RUN pi-habilita2 (INPUT "add").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-cancel
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cancel C-Win
+ON CHOOSE OF bt-cancel IN FRAME f-cad /* Cancelar */
+DO:
+    RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-del
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-del C-Win
+ON CHOOSE OF bt-del IN FRAME f-cad /* Eliminar */
+DO:
+     DEF VAR lResp AS LOGICAL NO-UNDO INITIAL NO.
+    MESSAGE "Deseja eliminar o filme" filmes.NomFilme "?"
+            UPDATE lResp
+            VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO
+                TITLE "Eliminacao".
+    IF  lResp = YES THEN DO:
+        FIND FIRST aluguel_filmes NO-LOCK 
+            WHERE aluguel_filmes.CodFilme = filmes.CodFilme NO-ERROR.
+        IF AVAIL aluguel_filmes THEN DO:
+            MESSAGE "Há alugueis ativos com este filme."
+                VIEW-AS ALERT-BOX INFORMATION BUTTONS OK.
+            RETURN NO-APPLY.           
+        END.
+        ELSE DO:
+            FIND CURRENT filmes EXCLUSIVE-LOCK NO-ERROR.
+            DELETE filmes.
+            APPLY "choose" TO bt-prev.            
+        END.
+    END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-exit
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-exit C-Win
+ON CHOOSE OF bt-exit IN FRAME f-cad /* Sair */
+DO:
+   APPLY "close".  
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-export
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-export C-Win
+ON CHOOSE OF bt-export IN FRAME f-cad /* Exportar */
+DO:
+    RUN prg\procedures\filmes-json.p.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME bt-first
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-first C-Win
-ON CHOOSE OF bt-first IN FRAME DEFAULT-FRAME /* << */
+ON CHOOSE OF bt-first IN FRAME f-cad /* << */
 DO:
       RUN pi-posiciona-registro (INPUT "first").
     IF  AVAIL filmes THEN DO:
@@ -328,7 +404,7 @@ END.
 
 &Scoped-define SELF-NAME bt-last
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-last C-Win
-ON CHOOSE OF bt-last IN FRAME DEFAULT-FRAME /* >> */
+ON CHOOSE OF bt-last IN FRAME f-cad /* >> */
 DO:
     RUN pi-posiciona-registro (INPUT "last").
     IF  AVAIL filmes THEN DO:
@@ -344,7 +420,7 @@ END.
 
 &Scoped-define SELF-NAME bt-next
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-next C-Win
-ON CHOOSE OF bt-next IN FRAME DEFAULT-FRAME /* > */
+ON CHOOSE OF bt-next IN FRAME f-cad /* > */
 DO:
       RUN pi-posiciona-registro (INPUT "next").
     IF  AVAIL filmes THEN DO:
@@ -360,7 +436,7 @@ END.
 
 &Scoped-define SELF-NAME bt-prev
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-prev C-Win
-ON CHOOSE OF bt-prev IN FRAME DEFAULT-FRAME /* < */
+ON CHOOSE OF bt-prev IN FRAME f-cad /* < */
 DO:
       RUN pi-posiciona-registro (INPUT "prev").
     IF  AVAIL filmes THEN DO:
@@ -368,6 +444,33 @@ DO:
     END.
     ELSE
        CLEAR FRAME f-cad.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-save
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-save C-Win
+ON CHOOSE OF bt-save IN FRAME f-cad /* Salvar */
+DO:
+     RUN pi-save (cOpcao).
+   IF RETURN-VALUE = "NOK" THEN DO:
+       RETURN NO-APPLY.
+   END.
+   
+   RUN pi-habilita2 ("").
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-upd
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-upd C-Win
+ON CHOOSE OF bt-upd IN FRAME f-cad /* Modificar */
+DO:
+  RUN pi-habilita2 ("upd").
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -444,17 +547,17 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
 
-  {&OPEN-QUERY-DEFAULT-FRAME}
-  GET FIRST DEFAULT-FRAME.
+  {&OPEN-QUERY-f-cad}
+  GET FIRST f-cad.
   IF AVAILABLE Filmes THEN 
     DISPLAY Filmes.CodFilme Filmes.NomFilme Filmes.Genero Filmes.ValFilme 
           Filmes.Sinopse 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+      WITH FRAME f-cad IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
          bt-save bt-cancel bt-export bt-exit Filmes.CodFilme Filmes.NomFilme 
          Filmes.Genero Filmes.ValFilme Filmes.Sinopse 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
-  {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
+      WITH FRAME f-cad IN WINDOW C-Win.
+  {&OPEN-BROWSERS-IN-QUERY-f-cad}
   VIEW C-Win.
 END PROCEDURE.
 
@@ -533,9 +636,8 @@ DEF INPUT PARAM pOpcao AS CHAR NO-UNDO.
     ASSIGN bt-save:SENSITIVE IN FRAME f-cad = lHabilita
            bt-cancel:SENSITIVE IN FRAME f-cad = lHabilita.
 
-    ASSIGN filmes.NomCidade:SENSITIVE IN FRAME f-cad = lHabilita 
+    ASSIGN filmes.nomFilme:SENSITIVE IN FRAME f-cad = lHabilita 
            filmes.genero:SENSITIVE IN FRAME f-cad = lHabilita
-           filmes.NomCidade:SENSITIVE IN FRAME f-cad = lHabilita 
            filmes.valfilme:SENSITIVE IN FRAME f-cad = lHabilita
            filmes.sinopse:SENSITIVE IN FRAME f-cad = lHabilita.
 
@@ -586,7 +688,7 @@ PROCEDURE pi-posiciona-registro :
                 RUN pi-posiciona-registro (INPUT "last").
             END.
         END.
-    END CASE
+    END CASE.
 
 END PROCEDURE.
 
@@ -609,7 +711,7 @@ PROCEDURE pi-save :
             FIND FIRST bf-filmes NO-LOCK
                 WHERE bf-filmes.CodFilme = INPUT FRAME f-cad filmes.CodFilme NO-ERROR.
             IF AVAIL bf-filmes THEN DO:
-                MESSAGE "Código de cidade já existente!"
+                MESSAGE "Código de filme já existente!"
                         VIEW-AS ALERT-BOX.
                 APPLY "entry" TO filmes.CodFilme IN FRAME f-cad.
                 RETURN "NOK".

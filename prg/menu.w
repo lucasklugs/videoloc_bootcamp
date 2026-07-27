@@ -248,10 +248,56 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME bt-alugueis
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-alugueis C-Win
+ON CHOOSE OF bt-alugueis IN FRAME DEFAULT-FRAME /* Alugueis */
+DO:
+  RUN prg/alugueis.w PERSISTENT.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME bt-cidades
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-cidades C-Win
 ON CHOOSE OF bt-cidades IN FRAME DEFAULT-FRAME /* Cidades */
-RUN telas/cidades.w PERSISTENT.
+DO:
+    RUN prg/cidades.w PERSISTENT.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-clientes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-clientes C-Win
+ON CHOOSE OF bt-clientes IN FRAME DEFAULT-FRAME /* Clientes */
+DO:
+  RUN prg/clientes.w PERSISTENT.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-filmes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-filmes C-Win
+ON CHOOSE OF bt-filmes IN FRAME DEFAULT-FRAME /* Filmes */
+DO:
+  RUN prg/filmes.w PERSISTENT.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME bt-relatclientes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL bt-relatclientes C-Win
+ON CHOOSE OF bt-relatclientes IN FRAME DEFAULT-FRAME /* Clientes */
+DO:
+  RUN prg/cidades.w PERSISTENT.
+END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

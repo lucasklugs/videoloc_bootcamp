@@ -39,6 +39,11 @@ CREATE WIDGET-POOL.
 
 /* Local Variable Definitions ---                                       */
 
+DEFINE VARIABLE iCodCliente AS INTEGER NO-UNDO.
+DEFINE VARIABLE cOpcao AS CHARACTER NO-UNDO.
+
+DEFINE BUFFER bf-clientes FOR clientes.
+
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
@@ -68,20 +73,19 @@ CREATE WIDGET-POOL.
 
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-FIELDS Clientes.CodCidade Cidades.NomCidade ~
-Clientes.Observacao 
+&Scoped-Define ENABLED-FIELDS Clientes.CodCliente Clientes.NomCliente ~
+Clientes.Endereco Clientes.CodCidade Cidades.NomCidade Clientes.Observacao 
 &Scoped-define ENABLED-TABLES Clientes Cidades
 &Scoped-define FIRST-ENABLED-TABLE Clientes
 &Scoped-define SECOND-ENABLED-TABLE Cidades
 &Scoped-Define ENABLED-OBJECTS RECT-5 RECT-6 bt-first bt-prev bt-next ~
-bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-done FILL-IN-7 ~
-FILL-IN-12 FILL-IN-14 
-&Scoped-Define DISPLAYED-FIELDS Clientes.CodCidade Cidades.NomCidade ~
-Clientes.Observacao 
+bt-last bt-add bt-upd bt-del bt-save bt-cancel bt-export bt-exit 
+&Scoped-Define DISPLAYED-FIELDS Clientes.CodCliente Clientes.NomCliente ~
+Clientes.Endereco Clientes.CodCidade Cidades.NomCidade Clientes.Observacao 
 &Scoped-define DISPLAYED-TABLES Clientes Cidades
 &Scoped-define FIRST-DISPLAYED-TABLE Clientes
 &Scoped-define SECOND-DISPLAYED-TABLE Cidades
-&Scoped-Define DISPLAYED-OBJECTS FILL-IN-7 FILL-IN-12 FILL-IN-14 
+
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -112,7 +116,7 @@ DEFINE BUTTON bt-del
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
-DEFINE BUTTON bt-done 
+DEFINE BUTTON bt-exit AUTO-END-KEY 
      LABEL "Sair" 
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
@@ -123,22 +127,22 @@ DEFINE BUTTON bt-export
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-first 
-     LABEL "<" 
+     LABEL "<<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
 DEFINE BUTTON bt-last 
-     LABEL ">" 
-     SIZE 5 BY 1.19
-     BGCOLOR 15 FGCOLOR 0 .
-
-DEFINE BUTTON bt-next 
      LABEL ">>" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
+DEFINE BUTTON bt-next 
+     LABEL ">" 
+     SIZE 5 BY 1.19
+     BGCOLOR 15 FGCOLOR 0 .
+
 DEFINE BUTTON bt-prev 
-     LABEL "<<" 
+     LABEL "<" 
      SIZE 5 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
 
@@ -151,21 +155,6 @@ DEFINE BUTTON bt-upd
      LABEL "Modificar" 
      SIZE 10.4 BY 1.19
      BGCOLOR 15 FGCOLOR 0 .
-
-DEFINE VARIABLE FILL-IN-12 LIKE Clientes.NomCliente
-     VIEW-AS FILL-IN 
-     SIZE 32 BY 1
-     BGCOLOR 15  NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-14 LIKE Clientes.Endereco
-     VIEW-AS FILL-IN 
-     SIZE 52 BY 1
-     BGCOLOR 15  NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-7 LIKE Clientes.CodCliente
-     VIEW-AS FILL-IN 
-     SIZE 10.4 BY 1
-     BGCOLOR 15  NO-UNDO.
 
 DEFINE RECTANGLE RECT-5
      EDGE-PIXELS 2 GRAPHIC-EDGE    ROUNDED 
@@ -196,18 +185,20 @@ DEFINE FRAME DEFAULT-FRAME
      bt-save AT ROW 1.81 COL 61 WIDGET-ID 32
      bt-cancel AT ROW 1.81 COL 71.8 WIDGET-ID 34
      bt-export AT ROW 1.81 COL 83.6 WIDGET-ID 36
-     bt-done AT ROW 1.81 COL 111 WIDGET-ID 40
-     FILL-IN-7 AT ROW 6 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 58
+     bt-exit AT ROW 1.81 COL 111 WIDGET-ID 40
+     Clientes.CodCliente AT ROW 6 COL 17 COLON-ALIGNED WIDGET-ID 58
+          VIEW-AS FILL-IN 
+          SIZE 10.4 BY 1
           BGCOLOR 15 
-     FILL-IN-12 AT ROW 7.19 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 68
+     Clientes.NomCliente AT ROW 7.19 COL 17 COLON-ALIGNED WIDGET-ID 68
+          VIEW-AS FILL-IN 
+          SIZE 32 BY 1
           BGCOLOR 15 
-     FILL-IN-14 AT ROW 8.38 COL 17 COLON-ALIGNED HELP
-          "" WIDGET-ID 72
+     Clientes.Endereco AT ROW 8.38 COL 17 COLON-ALIGNED WIDGET-ID 72
+          VIEW-AS FILL-IN 
+          SIZE 52 BY 1
           BGCOLOR 15 
      Clientes.CodCidade AT ROW 9.57 COL 17 COLON-ALIGNED WIDGET-ID 76
-          LABEL "Cidade"
           VIEW-AS FILL-IN 
           SIZE 12 BY 1.19
           BGCOLOR 15 
@@ -225,7 +216,7 @@ DEFINE FRAME DEFAULT-FRAME
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COLUMN 1 ROW 1
          SIZE 124.4 BY 18.91
-         BGCOLOR 7  WIDGET-ID 100.
+         BGCOLOR 8  WIDGET-ID 100.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -273,14 +264,6 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
   VISIBLE,,RUN-PERSISTENT                                               */
 /* SETTINGS FOR FRAME DEFAULT-FRAME
    FRAME-NAME                                                           */
-/* SETTINGS FOR FILL-IN Clientes.CodCidade IN FRAME DEFAULT-FRAME
-   EXP-LABEL                                                            */
-/* SETTINGS FOR FILL-IN FILL-IN-12 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.NomCliente                                   */
-/* SETTINGS FOR FILL-IN FILL-IN-14 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.Endereco EXP-SIZE                            */
-/* SETTINGS FOR FILL-IN FILL-IN-7 IN FRAME DEFAULT-FRAME
-   LIKE = videloc.Clientes.CodCliente EXP-SIZE                          */
 /* SETTINGS FOR FILL-IN Cidades.NomCidade IN FRAME DEFAULT-FRAME
    EXP-LABEL                                                            */
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
@@ -356,6 +339,10 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  
+  RUN pi-habilita2 ("").
+  APPLY "choose" TO bt-first.
+  
   IF NOT THIS-PROCEDURE:PERSISTENT THEN
     WAIT-FOR CLOSE OF THIS-PROCEDURE.
 END.
@@ -399,17 +386,17 @@ PROCEDURE enable_UI :
 
   {&OPEN-QUERY-DEFAULT-FRAME}
   GET FIRST DEFAULT-FRAME.
-  DISPLAY FILL-IN-7 FILL-IN-12 FILL-IN-14 
-      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   IF AVAILABLE Cidades THEN 
     DISPLAY Cidades.NomCidade 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   IF AVAILABLE Clientes THEN 
-    DISPLAY Clientes.CodCidade Clientes.Observacao 
+    DISPLAY Clientes.CodCliente Clientes.NomCliente Clientes.Endereco 
+          Clientes.CodCidade Clientes.Observacao 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   ENABLE RECT-5 RECT-6 bt-first bt-prev bt-next bt-last bt-add bt-upd bt-del 
-         bt-save bt-cancel bt-export bt-done FILL-IN-7 FILL-IN-12 FILL-IN-14 
-         Clientes.CodCidade Cidades.NomCidade Clientes.Observacao 
+         bt-save bt-cancel bt-export bt-exit Clientes.CodCliente 
+         Clientes.NomCliente Clientes.Endereco Clientes.CodCidade 
+         Cidades.NomCidade Clientes.Observacao 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.
